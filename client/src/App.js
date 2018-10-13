@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Icons from "./components/Icons";
-import Dashboard from "./components/Dashboard";
+import Dashboard from "./pages/Dashboard";
 // import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
@@ -182,7 +182,6 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-
           {this.renderIcons()}
           {/* <h1 className="App-title">Welcome to CryptoPath</h1> */}
         </header>
