@@ -20,11 +20,40 @@ class Dashboard extends Component {
     if (this.state.username && this.state.password) {
       console.log("you clicked button");
 
-      API.saveUser({
+      API.getUser({
         username: this.state.username,
-        password: this.state.password
+        password: this.state.password,
+        date: Date.now()
       })
         .then(res => this.loadCoins())
+        .catch(err => console.log(err));
+    }
+  };
+
+  signOn2 = event => {
+    event.preventDefault();
+    if (this.state.username && this.state.password) {
+
+      API.getUsers()
+        .then(res => {
+          this.loadCoins();
+          console.log("response is");
+          console.log(res);
+        })
+        .catch(err => console.log(err));
+    }
+  };
+
+  signOn3 = event => {
+    event.preventDefault();
+    if (this.state.username && this.state.password) {
+
+      API.getUser("5bc24a3e7a510c49255655a5")
+        .then(res => {
+          this.loadCoins();
+          console.log("response is");
+          console.log(res);
+        })
         .catch(err => console.log(err));
     }
   };
@@ -36,7 +65,8 @@ class Dashboard extends Component {
 
       API.saveUser({
         username: this.state.username,
-        password: this.state.password
+        password: this.state.password,
+        date: Date.now()
       })
         .then(res => this.loadCoins())
         .catch(err => console.log(err));
@@ -54,7 +84,8 @@ class Dashboard extends Component {
 
       API.saveUser({
         username: this.state.username,
-        password: this.state.password
+        password: this.state.password,
+        date: Date.now()
       })
         .then(res => this.loadCoins())
         .catch(err => console.log(err));
@@ -66,6 +97,7 @@ class Dashboard extends Component {
 
   loadCoins = () => {
     console.log("loading coins");
+    console.log(this);
   };
 
   // Handles updating component state when the user types into the input field
@@ -118,9 +150,8 @@ class Dashboard extends Component {
                 disabled={!(this.state.username && this.state.password)}
                 onClick={this.handleFormSubmit}
               >
-                Register New
+                Register
               </FormBtn2>
-
 
             </form>
           </Col>
