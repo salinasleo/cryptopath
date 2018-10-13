@@ -7,8 +7,7 @@ router.route("/")
   .post(coinsController.create);
 
 // Matches with "/api/users/:id"
-router
-  .route("/:id")
+router.route("/:id")
   .get(coinsController.findById)
   .put(coinsController.update)
   .delete(coinsController.remove);

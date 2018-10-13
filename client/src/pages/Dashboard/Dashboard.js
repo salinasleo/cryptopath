@@ -13,21 +13,23 @@ class Dashboard extends Component {
     password: ""
   };
 
-  // When the form is submitted, use the API.saveBook method to save the book data
-  // Then reload books from the database
+  // When the form is submitted, use the API.saveUser method to save the user data
+  // Then reload users from the database
   handleFormSubmit = event => {
     event.preventDefault();
     if (this.state.username && this.state.password) {
       console.log("you clicked button");
 
-      // API.saveUser({
-      //   username: this.state.username,
-      //   password: this.state.password
-      // })
-      //   .then(res => this.loadCoins())
-      //   .catch(err => console.log(err));
+      API.saveUser({
+        username: this.state.username,
+        password: this.state.password
+      })
+        .then(res => this.loadCoins())
+        .catch(err => console.log(err));
     }
   };
+
+
 
   loadCoins = () => {
     console.log("loading coins");
