@@ -12,4 +12,9 @@ router.route("/:id")
   .put(coinsController.update)
   .delete(coinsController.remove);
 
+  // Matches with "/api/users/:username"
+router.route("/login/:username")
+  .get(coinsController.findByUser);
+
+
 module.exports = router;

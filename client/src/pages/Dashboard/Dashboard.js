@@ -48,11 +48,21 @@ class Dashboard extends Component {
     event.preventDefault();
     if (this.state.username && this.state.password) {
 
-      API.getUser("5bc24a3e7a510c49255655a5")
+      API.login(this.state.username)
         .then(res => {
           this.loadCoins();
-          console.log("response is");
+          console.log("response pwd is");
           console.log(res);
+          console.log(res.data.password);
+          var pwdres = res.data.password;
+          console.log(pwdres);
+          if (pwdres === this.state.password) {
+            alert("passwords match, good to go");
+            localStorage.setItem("authentificateduser", this.state.username);
+          }
+          else {
+            alert("wrong passord");
+          };
         })
         .catch(err => console.log(err));
     }
@@ -88,8 +98,16 @@ class Dashboard extends Component {
         date: Date.now()
       })
         .then(res => this.loadCoins())
-        .catch(err => console.log(err));
+        .catch(err => {
+          console.log(err);
+          alert("Oops, something went wrong. " + err);
+        }
+        );
     }
+  };
+
+  logout = event => {
+    localStorage.clear();
   };
 
 
@@ -141,7 +159,7 @@ class Dashboard extends Component {
 
               <FormBtn
                 disabled={!(this.state.username && this.state.password)}
-                onClick={this.signOn}
+                onClick={this.signOn3}
               >
                 Sign on
               </FormBtn>

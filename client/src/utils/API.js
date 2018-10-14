@@ -10,6 +10,9 @@ export default {
   getUser: function (id) {
     return axios.get("/api/users/" + id);
   },
+  login: function (username) {
+    return axios.get("/api/users/login/" + username);
+  },
   // Deletes the user with the given id
   deleteUser: function (id) {
     return axios.delete("/api/users/" + id);
