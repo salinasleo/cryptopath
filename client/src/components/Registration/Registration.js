@@ -29,20 +29,6 @@ class Registration extends Component {
       }
     };
   
-    signOn2 = event => {
-      event.preventDefault();
-      if (this.state.username && this.state.password) {
-  
-        API.getUsers()
-          .then(res => {
-            this.loadCoins();
-            console.log("response is");
-            console.log(res);
-          })
-          .catch(err => console.log(err));
-      }
-    };
-  
     signOn3 = event => {
       event.preventDefault();
       if (this.state.username && this.state.password) {
@@ -98,10 +84,10 @@ class Registration extends Component {
           password: this.state.password,
           date: Date.now()
         })
-          .then(res => this.loadCoins())
+          .then(res => this.newuser())
           .catch(err => {
             console.log(err);
-            alert("Oops, something went wrong. " + err);
+            alert("Oops, username already exists. " + err);
           }
           );
       }
@@ -113,9 +99,11 @@ class Registration extends Component {
   
   
   
-    loadCoins = () => {
-      console.log("loading coins");
-      console.log(this);
+    newuser = () => {
+      console.log("Thank you for registering");
+      this.state.authenticated = true; 
+      localStorage.setItem("authentificateduser", this.state.username);
+      window.location.reload();
     };
   
     // Handles updating component state when the user types into the input field
