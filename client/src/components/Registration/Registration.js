@@ -35,7 +35,7 @@ class Registration extends Component {
   
         API.login(this.state.username)
           .then(res => {
-            this.loadCoins();
+            // this.loadCoins();
             // console.log("response pwd is");
             // console.log(res);
             // console.log(res.data.password);
@@ -51,9 +51,13 @@ class Registration extends Component {
               alert("wrong passord");
             };
           })
-          .catch(err => console.log(err));
-      }
-    };
+          .catch(err => {
+                alert("User does not exist. " + err);
+            
+            console.log(err);
+        })
+        } ;
+      };   
   
     registerUser = event => {
       event.preventDefault();
@@ -96,7 +100,6 @@ class Registration extends Component {
     logout = event => {
       localStorage.clear();
     };
-  
   
   
     newuser = () => {

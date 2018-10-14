@@ -1,20 +1,20 @@
 const router = require("express").Router();
-const coinsController = require("../../controllers/coinsController");
+const usersController = require("../../controllers/usersController");
 
 // Matches with "/api/users"
 router.route("/")
-  .get(coinsController.findAll)
-  .post(coinsController.create);
+  .get(usersController.findAll)
+  .post(usersController.create);
 
 // Matches with "/api/users/:id"
 router.route("/:id")
-  .get(coinsController.findById)
-  .put(coinsController.update)
-  .delete(coinsController.remove);
+  .get(usersController.findById)
+  .put(usersController.update)
+  .delete(usersController.remove);
 
-  // Matches with "/api/users/:username"
+  // Matches with "/api/users/login/:username"
 router.route("/login/:username")
-  .get(coinsController.findByUser);
+  .get(usersController.findByUser);
 
 
 module.exports = router;
