@@ -1,20 +1,23 @@
 .list-overflow-container {
-  max-height: 545px;
+  max-width: 460px;
+  width: 70%;
+  margin: auto;
   border: 1px #DDDDDD solid;
   border-radius: 4px;
-  overflow-y: scroll;
-  overflow-x: hidden;
+
+  /* overflow-y: scroll;
+  overflow-x: hidden; */
 }
 
-.list-overflow-container ul {
+/* .list-overflow-container ul {
   margin: 0;
-}
+} */
 
-.list-overflow-container li {
+/* .list-overflow-container li {
   border-radius: 0px;
   border-left: none;
   border-right: none;
-}
+} */
 
 .list-overflow-container li * {
   cursor: pointer;
@@ -30,4 +33,18 @@
 
 .list-overflow-container li:last-child {
   border-bottom: none;
+} 
+
+/* unvisited link */
+#coinAtag {
+  color: #222;
+}
+
+.ul {
+  white-space: nowrap;
+}
+
+.ul li {
+  display: inline-block;
+  white-space: nowrap;
 }

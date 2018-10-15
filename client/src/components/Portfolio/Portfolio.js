@@ -226,14 +226,14 @@ class Portfolio extends Component {
     <List>
       {this.state.portfolio.map(portfolio => {
         return (
-          <ListItem key={portfolio._id}>
-            <a href={"/coins/" + portfolio._id}>
-              <strong>
-                {portfolio.coin} own {portfolio.quantity}
+          <li class="list-group-item d-flex justify-content-between align-items-center" key={portfolio._id}>
+            <a id="coinAtag" href={"/coins/" + portfolio.coin}>
+              <strong id="coinAtag">
+                {portfolio.coin} <span class="badge badge-dark badge-pill">{portfolio.quantity}</span> 
               </strong>
             </a>
             <DeleteBtn onClick={() => this.deleteCoin(portfolio._id)} />
-          </ListItem>
+          </li>
         );
       })}
     </List>
