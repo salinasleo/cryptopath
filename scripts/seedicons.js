@@ -14,6 +14,7 @@ const iconsSeed = [
     url: "/bitcoin",
     src: "./images/bitcoin.ico",
     name: "bitcoin",
+    ticker: "BTC",
     price: "$6,650",
     speed: "20s",
     styling: "App-logo"
@@ -24,6 +25,7 @@ const iconsSeed = [
     url: "/ethereum",
     src: "./images/ethereum.ico",
     name: "ethereum",
+    ticker: "ETH",
     price: "$224",
     speed: "20s",
     styling: "App-logo-counter-fast"
@@ -33,7 +35,8 @@ const iconsSeed = [
     clicked: false,
     url: "/litecoin",
     src: "./images/litecoin.ico",
-    name: "litecoin",
+    name: "litecoin", 
+    ticker: "LTC",
     price: "$54",
     speed: "20s",
     styling: "App-logo-fast"
@@ -44,6 +47,7 @@ const iconsSeed = [
     url: "/monero",
     src: "./images/monero.ico",
     name: "monero",
+    ticker: "XMR",
     price: "$117",
     speed: "20s",
     styling: "App-logo-counter"
@@ -54,6 +58,7 @@ const iconsSeed = [
     url: "/lisk",
     src: "./images/lisk.ico",
     name: "lisk",
+    ticker: "LSK",
     price: "$4.10",
     speed: "20s",
     styling: "App-logo"
@@ -64,6 +69,7 @@ const iconsSeed = [
     url: "/kin",
     src: "./images/kin.ico",
     name: "kin",
+    ticker: "KIN",
     price: "$0.06",
     speed: "20s",
     styling: "App-logo-counter-fast"
@@ -74,6 +80,7 @@ const iconsSeed = [
     url: "/stellar",
     src: "./images/stellar.ico",
     name: "stellar",
+    ticker: "XLM",
     price: "$0.34",
     speed: "20s",
     styling: "App-logo-fast"
@@ -84,6 +91,7 @@ const iconsSeed = [
     url: "/dash",
     src: "./images/dash.ico",
     name: "dash",
+    ticker: "DASH",
     price: "$200",
     speed: "20s",
     styling: "App-logo-counter"
@@ -94,6 +102,7 @@ const iconsSeed = [
     url: "/iota",
     src: "./images/iota.ico",
     name: "iota",
+    ticker: "IOTA",
     price: "$0.54",
     speed: "20s",
     styling: "App-logo"
@@ -104,6 +113,7 @@ const iconsSeed = [
     url: "/doge",
     src: "./images/doge.ico",
     name: "doge",
+    ticker: "DOGE",
     price: "$0.54",
     speed: "20s",
     styling: "App-logo-counter-fast"
