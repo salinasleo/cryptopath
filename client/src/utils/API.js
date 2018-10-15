@@ -18,7 +18,7 @@ export default {
     return axios.delete("/api/users/" + id);
   },
   saveUser: function (stuff) {
-    console.log("hello world");
+    console.log("hello world user");
     console.log(stuff);
     return axios.post("/api/users", stuff);
   }

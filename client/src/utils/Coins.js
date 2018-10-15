@@ -18,7 +18,7 @@ export default {
     return axios.delete("/api/coins/" + id);
   },
   saveCoin: function (stuff) {
-    console.log("hello world");
+    console.log("hello world coin");
     console.log(stuff);
     return axios.post("/api/coins", stuff);
   }

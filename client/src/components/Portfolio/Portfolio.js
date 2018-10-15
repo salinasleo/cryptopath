@@ -4,7 +4,7 @@ import { Col, Row, Container } from "../../components/Grid";
 import AddCoin from "../../components/AddCoin";
 import $ from 'jquery';
 import { Input, TextArea, FormBtn, FormBtn2 } from "../../components/Form";
-import Coins from "../../utils/API";
+import Coins from "../../utils/Coins";
 
 
 $(document).on("click", '#logout', logout);
@@ -36,11 +36,13 @@ const datenow = Date.now();
 
 class Portfolio extends Component {
     state = {
+        username:localStorage.authentificateduser,
         addcoins: true,
-        coin: "",
+        coin: "Bitcoin",
         quantity: "",
         cost: "",
-        purchasedate: ""
+        purchasedate: "", 
+        notes: ""
     };
 
     componentDidMount() {
@@ -50,38 +52,62 @@ class Portfolio extends Component {
     addCoinSubmit = event => {
         // Preventing the default behavior of the form submit (which is to refresh the page)
         event.preventDefault();
-
-        Coins.saveCoins({
+        console.log("you tried to add a coin");
+        Coins.saveCoin({
             username: this.state.username,
-            password: this.state.password,
-            date: Date.now()
+            coin: this.state.coin,
+            quantity: this.state.quantity,
+            purchaseprice: this.state.purchaseprice,
+            purchasedate: this.state.purchasedate,
+            notes: this.state.notes
         })
-            .then(res => this.newuser())
+            .then(res => this.coinadded())
             .catch(err => {
                 console.log(err);
-                alert("Oops, username already exists. " + err);
+                alert("Oops, something went wrong. " + err);
             }
             );
     };
 
+  
+
+    coinadded = () => {
+        console.log("Thank you for adding new coin");
+      };
+
     // Handles updating component state when the user types into the input field
     handleInputChange = event => {
-        const { name, value } = event.target;
+        const { name, value} = event.target;
         this.setState({
             [name]: value
         });
+        console.log(this)
     };
+
+        // Handles updating component for select form
+        handleInputChangeOption = event => {
+            const { name, select } = event.target.value;
+            this.setState({
+                [name]: select
+            });
+            console.log(this)
+        };
 
     handleplusclick = event => {
         this.setState(state => ({
             addcoins: false
-          }));
+        }));
     };
 
     handleminusclick = event => {
         this.setState(state => ({
-            addcoins: true
-          }));
+            addcoins: true,
+            coin: "",
+            quantity: "",
+            cost: "",
+            purchasedate: "", 
+            notes: ""
+        }));
     };
 
     renderPage = () => {
@@ -111,40 +137,65 @@ class Portfolio extends Component {
                     <Col size="md-2">
                         <div id="hidden_elements">
                             <form>
-                                {/* <Input
-      value={this.state.username}
-      onChange={this.handleInputChange}
-      name="coin"
-      placeholder="BTC"
-    /> */}
                                 <div class="form-group">
                                     {/* <label for="exampleFormControlSelect1">Coin</label> */}
-                                    <select class="form-control" id="coinselect" value={this.state.username}
-                                        onChange={this.handleInputChange}>
-                                        <option>Bitcoin</option>
-                                        <option>Ethereum</option>
-                                        <option>Litecoin</option>
-                                        <option>IOTA</option>
-                                        <option>DOGE</option>
+                                    <select name="coin" class="form-control" type="text" id="coinselect" value={this.state.value}
+                                        onChange={this.handleInputChange} aria-describedby="coinselectHelp">
+                                        <option value="BTC">Bitcoin</option>
+                                        <option value="ETH">Ethereum</option>
+                                        <option value="LTC">Litecoin</option>
+                                        <option value="IOTA">IOTA</option>
+                                        <option value="DOGE">DOGE</option>
+                                        <option value="XMR">Monero</option>
+                                        <option value="XLM">Stellar</option>
+                                        <option value="Dash">Dash</option>
                                     </select>
+                                    <small id="coinselectHelp" class="text">
+                                        Required. Other fields optional.
+                                        </small>
                                 </div>
+
+  {/* <div>
+               <select id="lang" onChange={this.change} value={this.state.value}>
+                  <option value="select">Select</option>
+                  <option value="Java">Java</option>
+                  <option value="C++">C++</option>
+               </select>
+               <p></p>
+               <p>{this.state.value}</p>
+           </div> */}
+                                
                                 <Input
-                                    value={this.state.password}
+                                    value={this.state.quantity}
                                     onChange={this.handleInputChange}
                                     name="quantity"
-                                    placeholder="Coin Quantity"
+                                    type="number"
+                                    step="0.000000001"
+                                    min="0"
+                                    placeholder="Coin Quantity" aria-describedby="quantityHelp"
                                 />
                                 <Input
-                                    value={this.state.password}
+                                    value={this.state.purchaseprice}
                                     onChange={this.handleInputChange}
-                                    name="cost"
+                                    type="number"
+                                    step="0.000000001"
+                                    min="0"
+                                    name="purchaseprice"
                                     placeholder="$USD Cost per Coin"
                                 />
                                 <Input
-                                    value={this.state.password}
+                                    value={this.state.purchasedate}
                                     onChange={this.handleInputChange}
+                                    type="date"
                                     name="purchasedate"
-                                    placeholder="10/16/2018" /*{datenow}*/
+                                    placeholder="Purchased on MM/DD/YYYY" /*{datenow}*/
+                                />
+                                   <Input
+                                    value={this.state.notes}
+                                    onChange={this.handleInputChange}
+                                    type="text"
+                                    name="notes"
+                                    placeholder="notes" /*{datenow}*/
                                 />
                                 <FormBtn
                                     onClick={this.addCoinSubmit}

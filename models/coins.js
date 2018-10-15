@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const coinsSchema = new Schema({
     username: { type: String, required: true },
     coin: { type: String, required: true },
+    quantity: { type: Number},
     purchasedate: { type: Date, default: Date.now },
     purchaseprice: { type: Number },
     favorite: { type: Boolean, default: false },
@@ -21,16 +22,12 @@ const coinsSchema = new Schema({
 });
 
 coinsSchema.methods.fav = function () {
-    // Adds "...theCoolest" to the end of the current user's username
     this.fav = true;
-    // Return the new username
     return this.fav;
 };
 
 coinsSchema.methods.unfav = function () {
-    // Adds "...theCoolest" to the end of the current user's username
     this.fav = false;
-    // Return the new username
     return this.unfav;
 };
 

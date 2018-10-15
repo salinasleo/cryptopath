@@ -14,20 +14,20 @@ class Registration extends Component {
   
     // When the form is submitted, use the API.saveUser method to save the user data
     // Then reload users from the database
-    signOn = event => {
-      event.preventDefault();
-      if (this.state.username && this.state.password) {
-        console.log("you clicked button");
+    // signOn = event => {
+    //   event.preventDefault();
+    //   if (this.state.username && this.state.password) {
+    //     console.log("you clicked button");
   
-        API.getUser({
-          username: this.state.username,
-          password: this.state.password,
-          date: Date.now()
-        })
-          .then(res => this.loadCoins())
-          .catch(err => console.log(err));
-      }
-    };
+    //     API.getUser({
+    //       username: this.state.username,
+    //       password: this.state.password,
+    //       date: Date.now()
+    //     })
+    //       .then(res => this.loadCoins())
+    //       .catch(err => console.log(err));
+    //   }
+    // };
   
     signOn3 = event => {
       event.preventDefault();
@@ -59,20 +59,20 @@ class Registration extends Component {
         } ;
       };   
   
-    registerUser = event => {
-      event.preventDefault();
-      if (this.state.username && this.state.password) {
-        console.log("you clicked button");
+    // registerUser = event => {
+    //   event.preventDefault();
+    //   if (this.state.username && this.state.password) {
+    //     console.log("you clicked button");
   
-        API.saveUser({
-          username: this.state.username,
-          password: this.state.password,
-          date: Date.now()
-        })
-          .then(res => this.loadCoins())
-          .catch(err => console.log(err));
-      }
-    };
+    //     API.saveUser({
+    //       username: this.state.username,
+    //       password: this.state.password,
+    //       date: Date.now()
+    //     })
+    //       .then(res => this.loadCoins())
+    //       .catch(err => console.log(err));
+    //   }
+    // };
   
     handleFormSubmit = event => {
       // Preventing the default behavior of the form submit (which is to refresh the page)
@@ -106,7 +106,7 @@ class Registration extends Component {
       console.log("Thank you for registering");
       this.state.authenticated = true; 
       localStorage.setItem("authentificateduser", this.state.username);
-      window.location.reload();
+    //   window.location.reload();
     };
   
     // Handles updating component state when the user types into the input field
