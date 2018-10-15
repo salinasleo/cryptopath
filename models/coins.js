@@ -35,6 +35,6 @@ coinsSchema.methods.unfav = function () {
 };
 
 
-const Coins = mongoose.model("Coins", usersSchema);
+const Coins = mongoose.model("Coins", coinsSchema);
 
 module.exports = Coins;
