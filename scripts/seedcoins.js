@@ -6,6 +6,9 @@ mongoose.connect(
   "mongodb://localhost/cryptopath"
 );
 
+mongoose.Promise = Promise;
+mongoose.connect(MONGODB_URI);
+
 const coinsSeed = [
   {
     username: "leosal",
