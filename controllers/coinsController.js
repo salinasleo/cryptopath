@@ -17,7 +17,7 @@ module.exports = {
   },
   findByUser: function(req, res) {
     db.Coins
-      .findOne({username:req.params.username})
+      .find({username:req.params.username})
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },

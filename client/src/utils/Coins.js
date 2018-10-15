@@ -10,8 +10,8 @@ export default {
   getCoin: function (id) {
     return axios.get("/api/coins/" + id);
   },
-  login: function (Coinname) {
-    return axios.get("/api/coins/login/" + Coinname);
+  getportfolio: function (user) {
+    return axios.get("/api/coins/login/" + user);
   },
   // Deletes the Coin with the given id
   deleteCoin: function (id) {

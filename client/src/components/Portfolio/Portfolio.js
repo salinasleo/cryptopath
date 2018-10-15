@@ -5,6 +5,8 @@ import AddCoin from "../../components/AddCoin";
 import $ from 'jquery';
 import { Input, TextArea, FormBtn, FormBtn2 } from "../../components/Form";
 import Coins from "../../utils/Coins";
+import DeleteBtn from "../../components/DeleteBtn";
+import { List, ListItem } from "../../components/List";
 
 
 $(document).on("click", '#logout', logout);
@@ -42,11 +44,13 @@ class Portfolio extends Component {
         quantity: "",
         cost: "",
         purchasedate: "", 
-        notes: ""
+        notes: "", 
+        portfolio : [],
     };
 
     componentDidMount() {
         document.getElementById("hidden_elements").style.display = "none";
+        this.getportfolio();
     }
 
     addCoinSubmit = event => {
@@ -61,7 +65,7 @@ class Portfolio extends Component {
             purchasedate: this.state.purchasedate,
             notes: this.state.notes
         })
-            .then(res => this.coinadded())
+            .then(res => this.coinadded()            )
             .catch(err => {
                 console.log(err);
                 alert("Oops, something went wrong. " + err);
@@ -69,10 +73,26 @@ class Portfolio extends Component {
             );
     };
 
-  
+    getportfolio = id => {
+        // Preventing the default behavior of the form submit (which is to refresh the page)
+        console.log("getting portfolio");
+        Coins.getportfolio(this.state.username)
+            .then(res => {
+                this.setState({ portfolio: res.data })
+                console.log(this.state.portfolio);
+                this.portfoliorender();
+            }
+        )
+            .catch(err =>  console.log(err));
+    };
+
+    portfoliorender = () => {
+        console.log("render portfolio");
+      };
 
     coinadded = () => {
         console.log("Thank you for adding new coin");
+        this.getportfolio();
       };
 
     // Handles updating component state when the user types into the input field
@@ -84,20 +104,17 @@ class Portfolio extends Component {
         console.log(this)
     };
 
-        // Handles updating component for select form
-        handleInputChangeOption = event => {
-            const { name, select } = event.target.value;
-            this.setState({
-                [name]: select
-            });
-            console.log(this)
-        };
-
     handleplusclick = event => {
         this.setState(state => ({
             addcoins: false
         }));
     };
+
+    deleteCoin = id => {
+        Coins.deleteCoin(id)
+          .then(res => this.getportfolio())
+          .catch(err => console.log(err));
+      };
 
     handleminusclick = event => {
         this.setState(state => ({
@@ -130,8 +147,6 @@ class Portfolio extends Component {
                         }
                     </Col>
                 </Row>
-
-                <br></br>
                 <Row>
                     <Col size="md-5"></Col>
                     <Col size="md-2">
@@ -206,7 +221,25 @@ class Portfolio extends Component {
                         </div>
                     </Col>
                 </Row>
-
+                <br></br>
+{this.state.portfolio.length ? (
+    <List>
+      {this.state.portfolio.map(portfolio => {
+        return (
+          <ListItem key={portfolio._id}>
+            <a href={"/coins/" + portfolio._id}>
+              <strong>
+                {portfolio.coin} own {portfolio.quantity}
+              </strong>
+            </a>
+            <DeleteBtn onClick={() => this.deleteCoin(portfolio._id)} />
+          </ListItem>
+        );
+      })}
+    </List>
+          ) : (
+            <h3>No Results to Display</h3>
+          )}
             </div>
         );
     }
