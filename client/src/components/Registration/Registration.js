@@ -3,6 +3,8 @@ import { Input, TextArea, FormBtn, FormBtn2 } from "../../components/Form";
 import { Col, Row, Container } from "../../components/Grid";
 import API from "../../utils/API";
 import Dashboard from "../../pages/Dashboard";
+import "./Registration.css";
+
 
 class Registration extends Component {
     // Setting our component's initial state
@@ -12,6 +14,7 @@ class Registration extends Component {
       authenticated: false
     };
   
+   
     // When the form is submitted, use the API.saveUser method to save the user data
     // Then reload users from the database
     // signOn = event => {
@@ -106,7 +109,7 @@ class Registration extends Component {
       console.log("Thank you for registering");
       this.state.authenticated = true; 
       localStorage.setItem("authentificateduser", this.state.username);
-    //   window.location.reload();
+      window.location.reload();
     };
   
     // Handles updating component state when the user types into the input field
@@ -116,7 +119,7 @@ class Registration extends Component {
         [name]: value
       });
     };
-      
+
 
     render() {
         return (

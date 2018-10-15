@@ -2,6 +2,7 @@ import React from "react";
 import "./Welcome.css";
 
 const Welcome = ({ children }) => (
+  
   <div className="jumbotron text-center">
     <h1>CryptoPath Dashboard!</h1>
     <br></br>

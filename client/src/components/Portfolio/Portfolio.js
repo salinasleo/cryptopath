@@ -7,7 +7,10 @@ import { Input, TextArea, FormBtn, FormBtn2 } from "../../components/Form";
 import Coins from "../../utils/Coins";
 import DeleteBtn from "../../components/DeleteBtn";
 import { List, ListItem } from "../../components/List";
+import Icons from "../../components/IconsPriced";
 
+var request = require("request");
+var usethisport;
 
 $(document).on("click", '#logout', logout);
 
@@ -32,9 +35,156 @@ function noaddcoinReveal() {
 };
 
 const datenow = Date.now();
-// const monthplaceholder = datenow.getMonth();
-// const yearplaceholder = datenow.getDay();
-// const dayplaceholder = datenow.getYear();
+
+
+function getPrices(coin) {
+    console.log("Getting prices from API...");
+  
+    var omdb = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=" + coin + "&tsyms=USD&extraParams=cryptopath";
+    
+    request(omdb, function(error, response, body) {
+  
+      if (!error && response.statusCode === 200) {
+        var Prices= JSON.parse(body);
+        console.log(Prices);
+        console.log("Prices length is " + Object.keys(Prices.DISPLAY).length);
+        parsePrices(Prices);
+      }
+  
+    });
+  };
+  
+  function parsePrices(Prices) {
+    var i;
+    var coins= Object.keys(Prices.DISPLAY);
+    console.log(coins);
+    console.log("length is " + coins.length);
+  
+    for (i = 0; i < coins.length; i++) { 
+  
+    var path = "Prices.DISPLAY." + coins[i];
+  
+    console.log(path);
+  
+      
+    // console.log("Price: " + Prices.DISPLAY.BTC.USD.PRICE + '\n' +
+    //           "Last Updated: " + Prices.DISPLAY.BTC.USD.LASTUPDATE + '\n'     ) ;
+  
+    console.log("Price: " + eval(path + ".USD.PRICE") + '\n' +
+              "Last Updated: " + eval(path + ".USD.LASTUPDATE") + '\n' +
+              "Percent Change 24hrs: " + eval(path + ".USD.CHANGEPCT24HOUR") + "%" + '\n'   ) ;
+  
+  }
+  };
+  
+  getPrices("ETH,BTC,LTC,XMR,IOTA,XLR,DOGE");
+
+//   console.log("this is port global" + usethisport);
+
+
+var staticicons = [
+    {
+      clicked: false,
+      url: "/bitcoin",
+      src: "./images/bitcoin.ico",
+      name: "bitcoin",
+      price: "$6,650",
+      speed: "20s",
+      styling: "App-logo"
+    },
+  
+    {
+      clicked: false,
+      url: "/ethereum",
+      src: "./images/ethereum.ico",
+      name: "ethereum",
+      price: "$224",
+      speed: "20s",
+      styling: "App-logo-counter-fast"
+    },
+  
+    {
+      clicked: false,
+      url: "/litecoin",
+      src: "./images/litecoin.ico",
+      name: "litecoin",
+      price: "$54",
+      speed: "20s",
+      styling: "App-logo-fast"
+    }
+    ,
+  
+    {
+      clicked: false,
+      url: "/monero",
+      src: "./images/monero.ico",
+      name: "monero",
+      price: "$117",
+      speed: "20s",
+      styling: "App-logo-counter"
+    },
+  
+    {
+      clicked: false,
+      url: "/lisk",
+      src: "./images/lisk.ico",
+      name: "lisk",
+      price: "$4.10",
+      speed: "20s",
+      styling: "App-logo"
+    },
+  
+    {
+      clicked: false,
+      url: "/kin",
+      src: "./images/kin.ico",
+      name: "kin",
+      price: "$0.06",
+      speed: "20s",
+      styling: "App-logo-counter-fast"
+    },
+  
+    {
+      clicked: false,
+      url: "/stellar",
+      src: "./images/stellar.ico",
+      name: "stellar",
+      price: "$0.34",
+      speed: "20s",
+      styling: "App-logo-fast"
+    },
+  
+    {
+      clicked: false,
+      url: "/dash",
+      src: "./images/dash.ico",
+      name: "dash",
+      price: "$200",
+      speed: "20s",
+      styling: "App-logo-counter"
+    },
+  
+    {
+      clicked: false,
+      url: "/iota",
+      src: "./images/iota.ico",
+      name: "iota",
+      price: "$0.54",
+      speed: "20s",
+      styling: "App-logo"
+    },
+  
+    {
+      clicked: false,
+      url: "/doge",
+      src: "./images/doge.ico",
+      name: "doge",
+      price: "$0.54",
+      speed: "20s",
+      styling: "App-logo-counter-fast"
+    }
+  ];
+
 
 class Portfolio extends Component {
     state = {
@@ -52,6 +202,13 @@ class Portfolio extends Component {
         document.getElementById("hidden_elements").style.display = "none";
         this.getportfolio();
     }
+
+    renderIcons() {
+        return staticicons.map((icon, index) => (
+          <Icons {...icon} alt={icon.name} handleClick={this.handleClick} />
+        ));
+      }
+        
 
     addCoinSubmit = event => {
         // Preventing the default behavior of the form submit (which is to refresh the page)
@@ -80,6 +237,15 @@ class Portfolio extends Component {
             .then(res => {
                 this.setState({ portfolio: res.data })
                 console.log(this.state.portfolio);
+                var usethisport = this.state.portfolio;
+                var i; 
+                var portforapi;
+                for (i=0; i< usethisport.length; i++) {
+                    if (i===0) {portforapi = usethisport[i].coin}
+                    else {portforapi = portforapi.concat(usethisport[i].coin)};
+                    if (i< usethisport.length-1) {portforapi= portforapi.concat(",")};
+                }
+                console.log(portforapi);
                 this.portfoliorender();
             }
         )
@@ -135,6 +301,12 @@ class Portfolio extends Component {
 
     render() {
         return (
+            <div>
+            <header className="App-header">
+            {this.renderIcons()}
+            {/* <h1 className="App-title">Welcome to CryptoPath</h1> */}
+          </header>
+
             <div className="jumbotron text-center">
                 <h7>Welcome {localStorage.authentificateduser}!  &nbsp; <span title="Logout" class="fas fa-sign-out-alt" id="logout"></span> </h7>
                 <Row>&nbsp;
@@ -238,8 +410,9 @@ class Portfolio extends Component {
       })}
     </List>
           ) : (
-            <h3>No Results to Display</h3>
+            <h3>No Results to Display. Add Coins. </h3>
           )}
+            </div>
             </div>
         );
     }

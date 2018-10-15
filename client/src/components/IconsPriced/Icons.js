@@ -5,7 +5,7 @@ const Icons = ({ src, index, name, price, styling, handleClick }) => (
 
         <figure>
                 <img data-id={index} className={styling} src={src} alt={name} onClick={handleClick} />
-                {/* <figcaption>{price}</figcaption> */}
+                <figcaption>{price}</figcaption>
         </figure>
 
 );
