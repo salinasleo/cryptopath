@@ -7,15 +7,15 @@ import './App.css';
 var request = require("request");
 
 
-function getPrices(coin) {
+function getPrices() {
   console.log("Getting prices from API...");
 
-  var omdb = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=" + coin + "&tsyms=USD&e=Coinbase&extraParams=cryptopath";
-  
-  request(omdb, function(error, response, body) {
+  var omdb = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=?fsym=BTC,ETH,XRP,BCH,EOS,XLM,LTC,USDT,ADA,XMR,TRX,IOTA,DASH,BNB,NEO,ETC,XEM,XTZ,VET,DOGE,ZEC,MKR,BTG,OMG,ZRX,ONT,DCR,QTUM,LSK,KIN&tsyms=USD&extraParams=cryptopath";
+
+  request(omdb, function (error, response, body) {
 
     if (!error && response.statusCode === 200) {
-      var Prices= JSON.parse(body);
+      var Prices = JSON.parse(body);
       console.log(Prices);
       console.log("Prices length is " + Object.keys(Prices.DISPLAY).length);
       parsePrices(Prices);
@@ -24,32 +24,25 @@ function getPrices(coin) {
   });
 };
 
+
 function parsePrices(Prices) {
   var i;
-  var coins= Object.keys(Prices.DISPLAY);
+  var coins = Object.keys(Prices.DISPLAY);
   console.log(coins);
   console.log("length is " + coins.length);
 
-  for (i = 0; i < coins.length; i++) { 
-  
+  for (i = 0; i < coins.length; i++) {
 
-  var path = "Prices.DISPLAY." + coins[i];
+    var path = "Prices.DISPLAY." + coins[i];
+    console.log(path);
+    console.log("Price: " + eval(path + ".USD.PRICE") + '\n' +
+      "Last Updated: " + eval(path + ".USD.LASTUPDATE") + '\n' +
+      "Percent Change 24hrs: " + eval(path + ".USD.CHANGEPCT24HOUR") + "%" + '\n');
 
-  console.log(path);
-
-    
-  // console.log("Price: " + Prices.DISPLAY.BTC.USD.PRICE + '\n' +
-  //           "Last Updated: " + Prices.DISPLAY.BTC.USD.LASTUPDATE + '\n'     ) ;
-
-  console.log("Price: " + eval(path + ".USD.PRICE") + '\n' +
-            "Last Updated: " + eval(path + ".USD.LASTUPDATE") + '\n' +
-            "Percent Change 24hrs: " + eval(path + ".USD.CHANGEPCT24HOUR") + "%" + '\n'   ) ;
-
-}
+  }
 };
 
-getPrices("BTC,ETH");
-
+getPrices();
 
 
 class App extends Component {
@@ -65,7 +58,6 @@ class App extends Component {
   //       speed: "20s",
   //       styling: "App-logo"
   //     },
-
   //     {
   //       clicked: false,
   //       url: "/ethereum",
@@ -91,7 +83,7 @@ class App extends Component {
     let icons = [...this.state.icons];
     console.log(id);
     console.log(icons);
-    
+
     // const icon = icons[id];
   };
 

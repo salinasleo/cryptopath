@@ -245,7 +245,7 @@ class Portfolio extends Component {
                     else {portforapi = portforapi.concat(usethisport[i].coin)};
                     if (i< usethisport.length-1) {portforapi= portforapi.concat(",")};
                 }
-                console.log(portforapi);
+                console.log("portforapi is" + portforapi);
                 this.portfoliorender();
             }
         )

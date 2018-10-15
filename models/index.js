@@ -1,4 +1,5 @@
 module.exports = {
     User: require("./users"),
-    Coins: require("./coins")
+    Coins: require("./coins"),
+    IconsModel: require("./icons"),
   };
