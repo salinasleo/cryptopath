@@ -211,6 +211,7 @@ class Portfolio extends Component {
 
     componentDidMount() {
         document.getElementById("hidden_elements").style.display = "none";
+        this.coinadded();
         this.getportfolio();
     }
 
@@ -238,7 +239,10 @@ class Portfolio extends Component {
             purchasedate: this.state.purchasedate,
             notes: this.state.notes
         })
-            .then(res => this.coinadded())
+            .then(res => {
+                this.coinadded();
+                this.getportfolio();
+            })
             .catch(err => {
                 console.log(err);
                 alert("Oops, something went wrong. " + err);
