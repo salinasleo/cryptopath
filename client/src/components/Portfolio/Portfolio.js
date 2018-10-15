@@ -311,7 +311,10 @@ class Portfolio extends Component {
 
     deleteCoin = id => {
         Coins.deleteCoin(id)
-            .then(res => this.getportfolio())
+            .then(res => {
+                this.getportfolio();
+                this.coinadded();
+            })
             .catch(err => console.log(err));
     };
 
