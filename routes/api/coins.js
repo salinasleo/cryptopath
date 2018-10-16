@@ -19,5 +19,14 @@ router.route("/login/:username")
 router.route("/priceupdate")
   .put(coinsController.addAPIdata);
 
+// router.route("/coins/LTC")
+//   .get(fridge.html);
+
+//   router.route("/coins/LTC")
+//   res.sendFile(fridge.html);
+
+// router.route("/coins/LTC/", function(req, res) {
+//     res.sendFile(fridge.html);
+//   });
 
 module.exports = router;

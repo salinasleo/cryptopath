@@ -24,12 +24,14 @@
     "nodemon": "^1.11.0"
   },
   "dependencies": {
+    "dotenv": "^6.0.0",
     "axios": "^0.16.2",
     "body-parser": "^1.18.2",
     "express": "^4.15.4",
     "if-env": "^1.0.4",
     "jquery": "^3.3.1",
-    "mongoose": "^5.0.17"
+    "mongoose": "^5.0.17",
+    "request": "^2.88.0"
   },
   "bugs": {
     "url": "https://github.com/salinasleo/cryptopath/issues"

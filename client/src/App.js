@@ -8,47 +8,66 @@ import Coins from "./utils/Coins";
 
 
 var request = require("request");
+var apiprices = [];
+var pricepair = {};
+
+
+function getPrices() {
+  console.log("Getting prices from API...");
+  var omdb = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=?fsym=USDT,BTC,ETH,XRP,BCH,EOS,XLM,LTC,ADA,XMR,TRX,IOTA,DASH,BNB,NEO,ETC,XEM,XTZ,VET,DOGE,ZEC,MKR,BTG,OMG,ZRX,ONT,DCR,QTUM,LSK,KIN'&tsyms=USD&extraParams=cryptopath";
+
+  request(omdb, function (error, response, body) {
+      if (!error && response.statusCode === 200) {
+          var Prices = JSON.parse(body);
+          console.log(Prices);
+          console.log("Prices length is " + Object.keys(Prices.DISPLAY).length);
+          var i;
+          var coins = Object.keys(Prices.DISPLAY);
+          console.log(coins);
+          console.log("length is " + coins.length);
+
+          for (i = 0; i < coins.length; i++) {
+              var path = "Prices.DISPLAY." + coins[i];
+              console.log(path);
+              // console.log("Price: " + Prices.DISPLAY.BTC.USD.PRICE + '\n' +
+              //           "Last Updated: " + Prices.DISPLAY.BTC.USD.LASTUPDATE + '\n'     ) ;
+              console.log("Price: " + eval(path + ".USD.PRICE") + '\n' +
+                  "Last Updated: " + eval(path + ".USD.LASTUPDATE") + '\n' +
+                  "Percent Change 24hrs: " + eval(path + ".USD.CHANGEPCT24HOUR") + "%" + '\n');
+              pricepair = {
+                  coin: coins[i], price: eval(path + ".USD.PRICE"), percent_change_24: eval(path + ".USD.CHANGEPCT24HOUR")
+              };
+              apiprices.push(pricepair);
+          }
+          console.log(apiprices);
+          // process.env.REACT_APP_SECRET_CODE = apiprices;
+      }
+
+  });
+};
+
+getPrices();
+
+window.setTimeout(updatePricesfromAPI, 2000);
+
+function updatePricesfromAPI(apiprices) {
+  console.log("updating prices after 2000 ms");
+  console.log(apiprices);
+  console.log("process.env.REACT_APP_SECRET_CODE is " + process.env.REACT_APP_SECRET_CODE);
+  
+  /*
+  Coins.updatePrices(apiprices)
+  .then(res => {
+    var updatedtable = res.data;
+      })
+  .catch(err => {
+        alert("something went wrong with price update " + err);
+    console.log(err);
+})*/
+} ;
 
 class App extends Component {
-
-//   getPrices = () => {
-//     console.log("Getting prices from API...");
   
-//     var omdb = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=?fsym=BTC,ETH,XRP,BCH,EOS,XLM,LTC,USDT,ADA,XMR,TRX,IOTA,DASH,BNB,NEO,ETC,XEM,XTZ,VET,DOGE,ZEC,MKR,BTG,OMG,ZRX,ONT,DCR,QTUM,LSK,KIN&tsyms=USD&extraParams=cryptopath";
-  
-//     request(omdb, function (error, response, body) {
-  
-//       if (!error && response.statusCode === 200) {
-//         var Prices = JSON.parse(body);
-//         console.log(Prices);
-//         console.log("Prices length is " + Object.keys(Prices.DISPLAY).length);
-//         this.parsePrices(Prices);
-//       }
-//     });
-//   };
-
-// parsePrices = (Prices) => {
-//     var i;
-//     var coins = Object.keys(Prices.DISPLAY);
-//     console.log(coins);
-//     console.log("length is " + coins.length);
-  
-//     for (i = 0; i < coins.length; i++) {
-  
-//       var path = "Prices.DISPLAY." + coins[i];
-//       console.log(path);
-//       console.log("Price: " + eval(path + ".USD.PRICE") + '\n' +
-//         "Last Updated: " + eval(path + ".USD.LASTUPDATE") + '\n' +
-//         "Percent Change 24hrs: " + eval(path + ".USD.CHANGEPCT24HOUR") + "%" + '\n');
-//         Coins.updatePrices(coins)
-//         .then(res => {
-//           console.log(res);
-//                   })
-//         .catch(err => {
-//           console.log("something went wrong " + err);
-//       })
-//     }
-//   };
   
 
   renderIcons() {

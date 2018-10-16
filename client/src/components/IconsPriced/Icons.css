@@ -21,6 +21,10 @@
     animation: App-logo-spin-counter infinite 10s linear;
     height: 80px;
   }
+
+  .App-logo-static{
+    height: 80px;
+  }
   
   .App-header {
     background-color: #222;

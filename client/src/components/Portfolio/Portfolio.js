@@ -6,6 +6,7 @@ import AddCoin from "../../components/AddCoin";
 import $ from 'jquery';
 import { Input, TextArea, FormBtn, FormBtn2 } from "../../components/Form";
 import Coins from "../../utils/Coins";
+import Iconsutil from "../../utils/Iconsutil";
 import DeleteBtn from "../../components/DeleteBtn";
 import { List, ListItem } from "../../components/List";
 import Icons from "../../components/IconsPriced";
@@ -77,6 +78,7 @@ getPrices();
 
 
 
+
 //   console.log("this is port global" + usethisport);
 
 
@@ -91,136 +93,20 @@ class Portfolio extends Component {
         purchasedate: "",
         notes: "",
         portfolio: [],
-        stateicons: [
-            {
-                clicked: false,
-                url: "/bitcoin",
-                src: "./images/bitcoin.ico",
-                name: "bitcoin",
-                ticker: "BTC",
-                price: "6,323",
-                speed: "20s",
-                styling: "App-logo",
-                percent_change_24: ""
-            },
-
-            {
-                clicked: false,
-                url: "/ethereum",
-                src: "./images/ethereum.ico",
-                name: "ethereum",
-                ticker: "ETH",
-                price: "199",
-                speed: "20s",
-                styling: "App-logo-counter-fast",
-                percent_change_24: ""
-            },
-
-            {
-                clicked: false,
-                url: "/litecoin",
-                src: "./images/litecoin.ico",
-                name: "litecoin",
-                ticker: "LTC",
-                price: "55",
-                speed: "20s",
-                styling: "App-logo-fast",
-                percent_change_24: ""
-            }
-            ,
-
-            {
-                clicked: false,
-                url: "/monero",
-                src: "./images/monero.ico",
-                name: "monero",
-                ticker: "XMR",
-                price: "$117",
-                speed: "20s",
-                styling: "App-logo-counter",
-                percent_change_24: ""
-            },
-
-            {
-                clicked: false,
-                url: "/lisk",
-                src: "./images/lisk.ico",
-                name: "lisk",
-                ticker: "LSK",
-                price: "$4.10",
-                speed: "20s",
-                styling: "App-logo",
-                percent_change_24: ""
-            },
-
-            {
-                clicked: false,
-                url: "/kin",
-                src: "./images/kin.ico",
-                name: "kin",
-                ticker: "KIN",
-                price: "$0.06",
-                speed: "20s",
-                styling: "App-logo-counter-fast",
-                percent_change_24: ""
-            },
-
-            {
-                clicked: false,
-                url: "/stellar",
-                src: "./images/stellar.ico",
-                name: "stellar",
-                ticker: "XLM",
-                price: "$0.34",
-                speed: "20s",
-                styling: "App-logo-fast",
-                percent_change_24: ""
-            },
-
-            {
-                clicked: false,
-                url: "/dash",
-                src: "./images/dash.ico",
-                name: "dash",
-                ticker: "DASH",
-                price: "$200",
-                speed: "20s",
-                styling: "App-logo-counter",
-                percent_change_24: ""
-            },
-
-            {
-                clicked: false,
-                url: "/iota",
-                src: "./images/iota.ico",
-                name: "iota",
-                ticker: "IOTA",
-                price: "$0.54",
-                speed: "20s",
-                styling: "App-logo",
-                percent_change_24: ""
-            }
-            ,
-
-            {
-                clicked: false,
-                url: "/doge",
-                src: "./images/doge.ico",
-                name: "doge",
-                ticker: "DOGE",
-                price: "$1.34",
-                speed: "20s",
-                styling: "App-logo-counter-fast",
-                percent_change_24: ""
-            }
-        ]
+        stateicons: [], 
+        price: "",
+        percent_change_24: "", 
+        port_value: "",
+        gain_loss: ""
     };
 
     componentDidMount() {
         document.getElementById("hidden_elements").style.display = "none";
+        this.geticons();
         this.getPrices();
         this.getportfolio();
         this.coinadded();
+ 
     }
 
 
@@ -272,28 +158,85 @@ class Portfolio extends Component {
         ));
     }
 
+    preaddCoinSubmit = event => {
+        // Preventing the default behavior of the form submit (which is to refresh the page)
+        event.preventDefault();
+        console.log("prescrub to add a coin");
+        console.log(apiprices);
+        var i;
+        for (i=0; i<apiprices.length; i++) {
+            if (apiprices[i].coin === this.state.coin) {
+                console.log("trying hard");
+                console.log(apiprices[i].coin);
+                console.log(apiprices[i].price);
+                console.log(this.state.price);
+                console.log(this.state.coin);
+                this.setState({ price: apiprices[i].price});
+                console.log(this.state.price);
+                this.setState({ percent_change_24: apiprices[i].percent_change_24});
+                this.setState({ port_value: apiprices[i].price*this.state.quantity});
+                this.setState({ gain_loss: (apiprices[i].price - this.state.purchaseprice)*this.state.quantity});
+            }
+        }
+        if (i = apiprices.length) {
+            console.log("latest state pre add is " +  this.state.price);
+        this.addCoinSubmit();
+        }
+    };
+
 
     addCoinSubmit = event => {
         // Preventing the default behavior of the form submit (which is to refresh the page)
-        event.preventDefault();
-        console.log("you tried to add a coin");
+        // event.preventDefault();
+        // console.log("now add a coin");
+        // console.log(apiprices);
+        // var i;
+        // for (i=0; i<apiprices.length; i++) {
+        //     if (apiprices[i].coin === this.state.coin) {
+        //         console.log("trying hard");
+        //         console.log(apiprices[i].coin);
+        //         console.log(apiprices[i].price);
+        //         console.log(this.state.price);
+        //         console.log(this.state.coin);
+        //         this.setState({ price: apiprices[i].price});
+        //         console.log(this.state.price);
+        //         this.setState({ percent_change_24: apiprices[i].percent_change_24});
+        //         i=apiprices.length;
+        //     }
+        // };
         Coins.saveCoin({
             username: this.state.username,
             coin: this.state.coin,
             quantity: this.state.quantity,
             purchaseprice: this.state.purchaseprice,
             purchasedate: this.state.purchasedate,
-            notes: this.state.notes
+            notes: this.state.notes,
+            price: this.state.price, 
+            percent_change_24: this.state.percent_change_24,
+            port_value: this.state.port_value,
+            gain_loss: this.state.gain_loss
         })
             .then(res => {
                 this.coinadded();
                 this.getportfolio();
+                console.log(this.state.price);
             })
             .catch(err => {
                 console.log(err);
                 alert("Oops, something went wrong. " + err);
             }
             );
+    };
+
+
+    geticons = id => {
+        console.log("getting icons");
+        Iconsutil.getIcons()
+            .then(res => {
+                this.setState({ stateicons: res.data })
+                console.log(this.state.stateicons);
+            }
+            ).catch(err => console.log(err));
     };
 
     getportfolio = id => {
@@ -323,10 +266,10 @@ class Portfolio extends Component {
                 // ghetto brute force way of adding api prices to icons
                 for (k = 0; k < this.state.stateicons.length; k++) {
                     for (j = 0; j < apiprices.length; j++) {
-                        console.log("icons array " + k + " " + this.state.stateicons[k].ticker);
-                        console.log("api prices array " + j + " " + apiprices[j].coin);
+                        // console.log("icons array " + k + " " + this.state.stateicons[k].ticker);
+                        // console.log("api prices array " + j + " " + apiprices[j].coin);
                         if (apiprices[j].coin === this.state.stateicons[k].ticker) {
-                            console.log("matched");
+                            // console.log("matched");
                             this.state.stateicons[k].price = apiprices[j].price;
                             this.state.stateicons[k].percent_change_24 = apiprices[j].percent_change_24;
                             j = apiprices.length;
@@ -483,7 +426,7 @@ class Portfolio extends Component {
                                         placeholder="notes" /*{datenow}*/
                                     />
                                     <FormBtn
-                                        onClick={this.addCoinSubmit}
+                                        onClick={this.preaddCoinSubmit}
                                     >
                                         Add Coin
     </FormBtn>
@@ -526,13 +469,18 @@ class Portfolio extends Component {
 return (
     <tr>
     <th scope="row"> <DeleteBtn onClick={() => this.deleteCoin(portfolio._id)} /></th>
-    <td> {portfolio.coin} <span class="badge badge-dark badge-pill">{portfolio.coin}</span> </td>
-    {portfolio.quantity == null ? (
-        <td>Watching</td> ) :(
-    <td> {portfolio.quantity.toLocaleString()}</td> )} 
-   {portfolio.purchaseprice == null ? (
+    <td> <a id="coinAtag" href={"/coins/" + portfolio.coin}> {portfolio.coin}  </a> <span class="badge badge-dark badge-pill">{portfolio.coin}</span> </td>
+    {portfolio.quantity >0 ? (
+            <td> {portfolio.quantity.toLocaleString()}</td> ) :(
+            <td>Watching</td> )
+} 
+    {portfolio.purchaseprice == null ? (
         <td>N/A</td> ) :(
     <td> {portfolio.purchaseprice.toLocaleString({ style: 'currency', currency: 'EUR' })}</td> )} 
+<td> {portfolio.price}</td>
+<td> {portfolio.percent_change_24}%</td>
+{/* <td> {portfolio.total_value}</td>
+<td> {portfolio.gain_loss}</td> */}
     </tr>
 );
 })}

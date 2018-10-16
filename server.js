@@ -31,3 +31,6 @@ app.listen(PORT, function() {
   console.log(`🌎  ==> Server now listening on PORT ${PORT}!`);
 });
 
+// app.get("/coins/LTC", function(req, res) {
+//   res.sendFile(fridge.html);
+// });
