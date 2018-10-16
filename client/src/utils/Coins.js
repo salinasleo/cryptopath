@@ -21,5 +21,10 @@ export default {
     console.log("hello world coin");
     console.log(stuff);
     return axios.post("/api/coins", stuff);
+  },
+  updatePrices: function (stuff) {
+    console.log("updating mongo with API prices");
+    console.log(stuff);
+    return axios.put("/api/coins/priceupdate", stuff);
   }
 };

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./Portfolio.css";
 import { Col, Row, Container } from "../../components/Grid";
+import {Table, Tablerow} from "../../components/Table";
 import AddCoin from "../../components/AddCoin";
 import $ from 'jquery';
 import { Input, TextArea, FormBtn, FormBtn2 } from "../../components/Form";
@@ -11,6 +12,8 @@ import Icons from "../../components/IconsPriced";
 
 var request = require("request");
 var usethisport;
+var apiprices = [];
+var pricepair = {};
 
 $(document).on("click", '#logout', logout);
 
@@ -37,47 +40,42 @@ function noaddcoinReveal() {
 const datenow = Date.now();
 
 
-function getPrices(coin) {
+function getPrices() {
     console.log("Getting prices from API...");
-
-    var omdb = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=" + coin + "&tsyms=USD&extraParams=cryptopath";
+    var omdb = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=?fsym=USDT,BTC,ETH,XRP,BCH,EOS,XLM,LTC,ADA,XMR,TRX,IOTA,DASH,BNB,NEO,ETC,XEM,XTZ,VET,DOGE,ZEC,MKR,BTG,OMG,ZRX,ONT,DCR,QTUM,LSK,KIN'&tsyms=USD&extraParams=cryptopath";
 
     request(omdb, function (error, response, body) {
-
         if (!error && response.statusCode === 200) {
             var Prices = JSON.parse(body);
             console.log(Prices);
             console.log("Prices length is " + Object.keys(Prices.DISPLAY).length);
-            parsePrices(Prices);
+            var i;
+            var coins = Object.keys(Prices.DISPLAY);
+            console.log(coins);
+            console.log("length is " + coins.length);
+
+            for (i = 0; i < coins.length; i++) {
+                var path = "Prices.DISPLAY." + coins[i];
+                console.log(path);
+                // console.log("Price: " + Prices.DISPLAY.BTC.USD.PRICE + '\n' +
+                //           "Last Updated: " + Prices.DISPLAY.BTC.USD.LASTUPDATE + '\n'     ) ;
+                console.log("Price: " + eval(path + ".USD.PRICE") + '\n' +
+                    "Last Updated: " + eval(path + ".USD.LASTUPDATE") + '\n' +
+                    "Percent Change 24hrs: " + eval(path + ".USD.CHANGEPCT24HOUR") + "%" + '\n');
+                pricepair = {
+                    coin: coins[i], price: eval(path + ".USD.PRICE"), percent_change_24: eval(path + ".USD.CHANGEPCT24HOUR")
+                };
+                apiprices.push(pricepair);
+            }
+            console.log(apiprices);
         }
 
     });
 };
 
-function parsePrices(Prices) {
-    var i;
-    var coins = Object.keys(Prices.DISPLAY);
-    console.log(coins);
-    console.log("length is " + coins.length);
-
-    for (i = 0; i < coins.length; i++) {
-
-        var path = "Prices.DISPLAY." + coins[i];
-
-        console.log(path);
+getPrices();
 
 
-        // console.log("Price: " + Prices.DISPLAY.BTC.USD.PRICE + '\n' +
-        //           "Last Updated: " + Prices.DISPLAY.BTC.USD.LASTUPDATE + '\n'     ) ;
-
-        console.log("Price: " + eval(path + ".USD.PRICE") + '\n' +
-            "Last Updated: " + eval(path + ".USD.LASTUPDATE") + '\n' +
-            "Percent Change 24hrs: " + eval(path + ".USD.CHANGEPCT24HOUR") + "%" + '\n');
-
-    }
-};
-
-getPrices("ETH,BTC,LTC,XMR,IOTA,XLR,DOGE");
 
 //   console.log("this is port global" + usethisport);
 
@@ -89,7 +87,7 @@ class Portfolio extends Component {
         addcoins: true,
         coin: "BTC",
         quantity: "",
-        cost: "",
+        purchaseprice: "",
         purchasedate: "",
         notes: "",
         portfolio: [],
@@ -100,9 +98,10 @@ class Portfolio extends Component {
                 src: "./images/bitcoin.ico",
                 name: "bitcoin",
                 ticker: "BTC",
-                price: "$6,650",
+                price: "6,323",
                 speed: "20s",
-                styling: "App-logo"
+                styling: "App-logo",
+                percent_change_24: ""
             },
 
             {
@@ -111,9 +110,10 @@ class Portfolio extends Component {
                 src: "./images/ethereum.ico",
                 name: "ethereum",
                 ticker: "ETH",
-                price: "$224",
+                price: "199",
                 speed: "20s",
-                styling: "App-logo-counter-fast"
+                styling: "App-logo-counter-fast",
+                percent_change_24: ""
             },
 
             {
@@ -122,9 +122,10 @@ class Portfolio extends Component {
                 src: "./images/litecoin.ico",
                 name: "litecoin",
                 ticker: "LTC",
-                price: "$54",
+                price: "55",
                 speed: "20s",
-                styling: "App-logo-fast"
+                styling: "App-logo-fast",
+                percent_change_24: ""
             }
             ,
 
@@ -136,7 +137,8 @@ class Portfolio extends Component {
                 ticker: "XMR",
                 price: "$117",
                 speed: "20s",
-                styling: "App-logo-counter"
+                styling: "App-logo-counter",
+                percent_change_24: ""
             },
 
             {
@@ -147,7 +149,8 @@ class Portfolio extends Component {
                 ticker: "LSK",
                 price: "$4.10",
                 speed: "20s",
-                styling: "App-logo"
+                styling: "App-logo",
+                percent_change_24: ""
             },
 
             {
@@ -158,7 +161,8 @@ class Portfolio extends Component {
                 ticker: "KIN",
                 price: "$0.06",
                 speed: "20s",
-                styling: "App-logo-counter-fast"
+                styling: "App-logo-counter-fast",
+                percent_change_24: ""
             },
 
             {
@@ -169,7 +173,8 @@ class Portfolio extends Component {
                 ticker: "XLM",
                 price: "$0.34",
                 speed: "20s",
-                styling: "App-logo-fast"
+                styling: "App-logo-fast",
+                percent_change_24: ""
             },
 
             {
@@ -180,7 +185,8 @@ class Portfolio extends Component {
                 ticker: "DASH",
                 price: "$200",
                 speed: "20s",
-                styling: "App-logo-counter"
+                styling: "App-logo-counter",
+                percent_change_24: ""
             },
 
             {
@@ -191,7 +197,8 @@ class Portfolio extends Component {
                 ticker: "IOTA",
                 price: "$0.54",
                 speed: "20s",
-                styling: "App-logo"
+                styling: "App-logo",
+                percent_change_24: ""
             }
             ,
 
@@ -203,17 +210,56 @@ class Portfolio extends Component {
                 ticker: "DOGE",
                 price: "$1.34",
                 speed: "20s",
-                styling: "App-logo-counter-fast"
+                styling: "App-logo-counter-fast",
+                percent_change_24: ""
             }
         ]
     };
 
-
     componentDidMount() {
         document.getElementById("hidden_elements").style.display = "none";
-        this.coinadded();
+        this.getPrices();
         this.getportfolio();
+        this.coinadded();
     }
+
+
+   getPrices() {
+        console.log("Getting prices from API...");
+        var omdb = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=?fsym=USDT,BTC,ETH,XRP,BCH,EOS,XLM,LTC,ADA,XMR,TRX,IOTA,DASH,BNB,NEO,ETC,XEM,XTZ,VET,DOGE,ZEC,MKR,BTG,OMG,ZRX,ONT,DCR,QTUM,LSK,KIN'&tsyms=USD&extraParams=cryptopath";
+    
+        request(omdb, function (error, response, body) {
+            if (!error && response.statusCode === 200) {
+                var Prices = JSON.parse(body);
+                console.log(Prices);
+                console.log("Prices length is " + Object.keys(Prices.DISPLAY).length);
+                var i;
+                var coins = Object.keys(Prices.DISPLAY);
+                console.log(coins);
+                console.log("length is " + coins.length);
+    
+                for (i = 0; i < coins.length; i++) {
+                    var path = "Prices.DISPLAY." + coins[i];
+                    console.log(path);
+                    // console.log("Price: " + Prices.DISPLAY.BTC.USD.PRICE + '\n' +
+                    //           "Last Updated: " + Prices.DISPLAY.BTC.USD.LASTUPDATE + '\n'     ) ;
+                    console.log("Price: " + eval(path + ".USD.PRICE") + '\n' +
+                        "Last Updated: " + eval(path + ".USD.LASTUPDATE") + '\n' +
+                        "Percent Change 24hrs: " + eval(path + ".USD.CHANGEPCT24HOUR") + "%" + '\n');
+                    pricepair = {
+                        coin: coins[i], price: eval(path + ".USD.PRICE"), percent_change_24: eval(path + ".USD.CHANGEPCT24HOUR")
+                    };
+                    apiprices.push(pricepair);
+                    if (i=== coins.length-1) {
+                        console.log(apiprices);
+                        console.log("done getting prices")};
+                }
+    
+            }
+    
+        });
+    };
+
 
     renderIcons() {
 
@@ -262,17 +308,33 @@ class Portfolio extends Component {
                 var k;
                 var j;
                 var portforapi;
+                // update whether to display or not
                 for (k = 0; k < this.state.stateicons.length; k++) {
                     this.state.stateicons[k].clicked = true;
                     for (j = 0; j < usethisport.length; j++) {
-                        console.log("icons array " + k + " " + this.state.stateicons[k].ticker);
-                        console.log("port array " + j + " " + usethisport[j].coin);
+                        // console.log("icons array " + k + " " + this.state.stateicons[k].ticker);
+                        // console.log("port array " + j + " " + usethisport[j].coin);
                         if (usethisport[j].coin === this.state.stateicons[k].ticker) {
-                            console.log("matched");
+                            // console.log("matched");
                             this.state.stateicons[k].clicked = false;
                         }
                     }
                 }
+                // ghetto brute force way of adding api prices to icons
+                for (k = 0; k < this.state.stateicons.length; k++) {
+                    for (j = 0; j < apiprices.length; j++) {
+                        console.log("icons array " + k + " " + this.state.stateicons[k].ticker);
+                        console.log("api prices array " + j + " " + apiprices[j].coin);
+                        if (apiprices[j].coin === this.state.stateicons[k].ticker) {
+                            console.log("matched");
+                            this.state.stateicons[k].price = apiprices[j].price;
+                            this.state.stateicons[k].percent_change_24 = apiprices[j].percent_change_24;
+                            j = apiprices.length;
+                        }
+                    }
+                }
+
+
                 for (i = 0; i < usethisport.length; i++) {
                     if (i === 0) { portforapi = usethisport[i].coin }
                     else { portforapi = portforapi.concat(usethisport[i].coin) };
@@ -430,7 +492,7 @@ class Portfolio extends Component {
                         </Col>
                     </Row>
                     <br></br>
-                    {this.state.portfolio.length ? (
+                    {/* {this.state.portfolio.length ? (
                         <List>
                             {this.state.portfolio.map(portfolio => {
                                 return (
@@ -447,7 +509,26 @@ class Portfolio extends Component {
                         </List>
                     ) : (
                             <h3>No Results to Display. Add Coins. </h3>
-                        )}
+                        )} */}
+
+                   
+
+ {this.state.portfolio.length ? (
+     <Table>
+          {this.state.portfolio.map(portfolio => {
+return (
+    <tr>
+    <th scope="row"> <DeleteBtn onClick={() => this.deleteCoin(portfolio._id)} /></th>
+    <td> {portfolio.coin} <span class="badge badge-dark badge-pill">{portfolio.coin}</span> </td>
+    <td> {portfolio.quantity}</td>
+    <td> {portfolio.purchaseprice}</td>
+    </tr>
+);
+})}
+</Table>
+) : (
+    <h3>No Results to Display. Add Coins. </h3>
+)}
                 </div>
             </div>
         );

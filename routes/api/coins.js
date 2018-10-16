@@ -16,5 +16,8 @@ router.route("/:id")
 router.route("/login/:username")
   .get(coinsController.findByUser);
 
+router.route("/priceupdate")
+  .put(coinsController.addAPIdata);
+
 
 module.exports = router;

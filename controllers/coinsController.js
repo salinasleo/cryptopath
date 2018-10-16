@@ -33,6 +33,12 @@ module.exports = {
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
+  addAPIdata: function(req, res) {
+    db.Coins
+      .findAndModify({coin: req.params.coin, new: true}, req.body)
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.status(422).json(err));
+  },
   remove: function(req, res) {
     db.Coins
       .findById({ _id: req.params.id })
@@ -41,3 +47,16 @@ module.exports = {
       .catch(err => res.status(422).json(err));
   }
 };
+
+
+// price:  { type: Number },
+// last_updated_price: { type: Date, default: Date.now }, 
+// percent_change_24: { type: Number },
+// volume24:
+
+// db.people.findAndModify({
+//   query: { name: "Andy" },
+//   sort: { rating: 1 },
+//   update: { $inc: { score: 1 } },
+//   upsert: true
+// })

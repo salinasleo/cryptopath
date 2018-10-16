@@ -4,71 +4,52 @@ import Dashboard from "./pages/Dashboard";
 // import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import './App.css';
+import Coins from "./utils/Coins";
+
+
 var request = require("request");
-
-
-function getPrices() {
-  console.log("Getting prices from API...");
-
-  var omdb = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=?fsym=BTC,ETH,XRP,BCH,EOS,XLM,LTC,USDT,ADA,XMR,TRX,IOTA,DASH,BNB,NEO,ETC,XEM,XTZ,VET,DOGE,ZEC,MKR,BTG,OMG,ZRX,ONT,DCR,QTUM,LSK,KIN&tsyms=USD&extraParams=cryptopath";
-
-  request(omdb, function (error, response, body) {
-
-    if (!error && response.statusCode === 200) {
-      var Prices = JSON.parse(body);
-      console.log(Prices);
-      console.log("Prices length is " + Object.keys(Prices.DISPLAY).length);
-      parsePrices(Prices);
-    }
-
-  });
-};
-
-
-function parsePrices(Prices) {
-  var i;
-  var coins = Object.keys(Prices.DISPLAY);
-  console.log(coins);
-  console.log("length is " + coins.length);
-
-  for (i = 0; i < coins.length; i++) {
-
-    var path = "Prices.DISPLAY." + coins[i];
-    console.log(path);
-    console.log("Price: " + eval(path + ".USD.PRICE") + '\n' +
-      "Last Updated: " + eval(path + ".USD.LASTUPDATE") + '\n' +
-      "Percent Change 24hrs: " + eval(path + ".USD.CHANGEPCT24HOUR") + "%" + '\n');
-
-  }
-};
-
-getPrices();
-
 
 class App extends Component {
 
-  // state = {
-  //   icons: [
-  //     {
-  //       clicked: false,
-  //       url: "/bitcoin",
-  //       src: "./images/bitcoin.ico",
-  //       name: "bitcoin",
-  //       price: "$6,650",
-  //       speed: "20s",
-  //       styling: "App-logo"
-  //     },
-  //     {
-  //       clicked: false,
-  //       url: "/ethereum",
-  //       src: "./images/ethereum.ico",
-  //       name: "ethereum",
-  //       price: "$224",
-  //       speed: "20s",
-  //       styling: "App-logo-counter-fast"
-  //     }
-  //   ]
-  // };
+//   getPrices = () => {
+//     console.log("Getting prices from API...");
+  
+//     var omdb = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=?fsym=BTC,ETH,XRP,BCH,EOS,XLM,LTC,USDT,ADA,XMR,TRX,IOTA,DASH,BNB,NEO,ETC,XEM,XTZ,VET,DOGE,ZEC,MKR,BTG,OMG,ZRX,ONT,DCR,QTUM,LSK,KIN&tsyms=USD&extraParams=cryptopath";
+  
+//     request(omdb, function (error, response, body) {
+  
+//       if (!error && response.statusCode === 200) {
+//         var Prices = JSON.parse(body);
+//         console.log(Prices);
+//         console.log("Prices length is " + Object.keys(Prices.DISPLAY).length);
+//         this.parsePrices(Prices);
+//       }
+//     });
+//   };
+
+// parsePrices = (Prices) => {
+//     var i;
+//     var coins = Object.keys(Prices.DISPLAY);
+//     console.log(coins);
+//     console.log("length is " + coins.length);
+  
+//     for (i = 0; i < coins.length; i++) {
+  
+//       var path = "Prices.DISPLAY." + coins[i];
+//       console.log(path);
+//       console.log("Price: " + eval(path + ".USD.PRICE") + '\n' +
+//         "Last Updated: " + eval(path + ".USD.LASTUPDATE") + '\n' +
+//         "Percent Change 24hrs: " + eval(path + ".USD.CHANGEPCT24HOUR") + "%" + '\n');
+//         Coins.updatePrices(coins)
+//         .then(res => {
+//           console.log(res);
+//                   })
+//         .catch(err => {
+//           console.log("something went wrong " + err);
+//       })
+//     }
+//   };
+  
 
   renderIcons() {
     return this.state.icons.map((icon, index) => (

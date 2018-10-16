@@ -18,7 +18,11 @@ const coinsSchema = new Schema({
             // Error Message
             "Note should be shorter."
         ]
-    }
+    },
+    price:  { type: Number },
+    last_updated_price: { type: Date, default: Date.now }, 
+    percent_change_24: { type: Number },
+    volume24:  { type: Number }
 });
 
 coinsSchema.methods.fav = function () {
