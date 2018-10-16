@@ -516,12 +516,23 @@ class Portfolio extends Component {
  {this.state.portfolio.length ? (
      <Table>
           {this.state.portfolio.map(portfolio => {
+
+// const numberWithCommas = (x) => {
+//     var parts = x.toString().split(".");
+//     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+//     return parts.join(".");
+//   }
+  
 return (
     <tr>
     <th scope="row"> <DeleteBtn onClick={() => this.deleteCoin(portfolio._id)} /></th>
     <td> {portfolio.coin} <span class="badge badge-dark badge-pill">{portfolio.coin}</span> </td>
-    <td> {portfolio.quantity}</td>
-    <td> {portfolio.purchaseprice}</td>
+    {portfolio.quantity == null ? (
+        <td>Watching</td> ) :(
+    <td> {portfolio.quantity.toLocaleString()}</td> )} 
+   {portfolio.purchaseprice == null ? (
+        <td>N/A</td> ) :(
+    <td> {portfolio.purchaseprice.toLocaleString({ style: 'currency', currency: 'EUR' })}</td> )} 
     </tr>
 );
 })}

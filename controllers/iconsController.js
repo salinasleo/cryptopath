@@ -12,7 +12,12 @@ module.exports = {
   update: function(req, res) {
     db.IconsModel
       .findAndModify({query: req.params.ticker, new:true, }, req.body)
-      .then(dbModel => res.json(dbModel))
+      .then(dbModel => 
+        {
+            res.json(dbModel);
+            return res.json(dbModel);
+        }
+        )
       .catch(err => res.status(422).json(err));
   }
 };
