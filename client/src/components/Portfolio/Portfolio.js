@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./Portfolio.css";
 import { Col, Row, Container } from "../../components/Grid";
-import {Table, Tablerow} from "../../components/Table";
+import { Table, Tablerow } from "../../components/Table";
 import AddCoin from "../../components/AddCoin";
 import $ from 'jquery';
 import { Input, TextArea, FormBtn, FormBtn2 } from "../../components/Form";
@@ -93,9 +93,9 @@ class Portfolio extends Component {
         purchasedate: "",
         notes: "",
         portfolio: [],
-        stateicons: [], 
+        stateicons: [],
         price: "",
-        percent_change_24: "", 
+        percent_change_24: "",
         port_value: "",
         gain_loss: ""
     };
@@ -106,14 +106,14 @@ class Portfolio extends Component {
         this.getPrices();
         this.getportfolio();
         this.coinadded();
- 
+
     }
 
 
-   getPrices() {
+    getPrices() {
         console.log("Getting prices from API...");
         var omdb = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=?fsym=USDT,BTC,ETH,XRP,BCH,EOS,XLM,LTC,ADA,XMR,TRX,IOTA,DASH,BNB,NEO,ETC,XEM,XTZ,VET,DOGE,ZEC,MKR,BTG,OMG,ZRX,ONT,DCR,QTUM,LSK,KIN'&tsyms=USD&extraParams=cryptopath";
-    
+
         request(omdb, function (error, response, body) {
             if (!error && response.statusCode === 200) {
                 var Prices = JSON.parse(body);
@@ -123,7 +123,7 @@ class Portfolio extends Component {
                 var coins = Object.keys(Prices.DISPLAY);
                 console.log(coins);
                 console.log("length is " + coins.length);
-    
+
                 for (i = 0; i < coins.length; i++) {
                     var path = "Prices.DISPLAY." + coins[i];
                     console.log(path);
@@ -136,13 +136,14 @@ class Portfolio extends Component {
                         coin: coins[i], price: eval(path + ".USD.PRICE"), percent_change_24: eval(path + ".USD.CHANGEPCT24HOUR")
                     };
                     apiprices.push(pricepair);
-                    if (i=== coins.length-1) {
+                    if (i === coins.length - 1) {
                         console.log(apiprices);
-                        console.log("done getting prices")};
+                        console.log("done getting prices")
+                    };
                 }
-    
+
             }
-    
+
         });
     };
 
@@ -158,52 +159,52 @@ class Portfolio extends Component {
         ));
     }
 
-    preaddCoinSubmit = event => {
+    // preaddCoinSubmit = event => {
+    //     // Preventing the default behavior of the form submit (which is to refresh the page)
+    //     event.preventDefault();
+    //     console.log("prescrub to add a coin");
+    //     console.log(apiprices);
+    //     var i;
+    //     for (i=0; i<apiprices.length; i++) {
+    //         if (apiprices[i].coin === this.state.coin) {
+    //             console.log("trying hard");
+    //             console.log(apiprices[i].coin);
+    //             console.log(apiprices[i].price);
+    //             console.log(this.state.price);
+    //             console.log(this.state.coin);
+    //             this.setState({ price: apiprices[i].price});
+    //             console.log(this.state.price);
+    //             this.setState({ percent_change_24: apiprices[i].percent_change_24});
+    //             this.setState({ port_value: apiprices[i].price*this.state.quantity});
+    //             this.setState({ gain_loss: (apiprices[i].price - this.state.purchaseprice)*this.state.quantity});
+    //         }
+    //     }
+    //     if (i = apiprices.length) {
+    //         console.log("latest state pre add is " +  this.state.price);
+    //     this.addCoinSubmit();
+    //     }
+    // };
+
+
+    addCoinSubmit = event => {
         // Preventing the default behavior of the form submit (which is to refresh the page)
         event.preventDefault();
-        console.log("prescrub to add a coin");
+        console.log("now add a coin");
         console.log(apiprices);
         var i;
-        for (i=0; i<apiprices.length; i++) {
+        for (i = 0; i < apiprices.length; i++) {
             if (apiprices[i].coin === this.state.coin) {
                 console.log("trying hard");
                 console.log(apiprices[i].coin);
                 console.log(apiprices[i].price);
                 console.log(this.state.price);
                 console.log(this.state.coin);
-                this.setState({ price: apiprices[i].price});
+                this.setState({ price: apiprices[i].price });
                 console.log(this.state.price);
-                this.setState({ percent_change_24: apiprices[i].percent_change_24});
-                this.setState({ port_value: apiprices[i].price*this.state.quantity});
-                this.setState({ gain_loss: (apiprices[i].price - this.state.purchaseprice)*this.state.quantity});
+                this.setState({ percent_change_24: apiprices[i].percent_change_24 });
+                i = apiprices.length;
             }
-        }
-        if (i = apiprices.length) {
-            console.log("latest state pre add is " +  this.state.price);
-        this.addCoinSubmit();
-        }
-    };
-
-
-    addCoinSubmit = event => {
-        // Preventing the default behavior of the form submit (which is to refresh the page)
-        // event.preventDefault();
-        // console.log("now add a coin");
-        // console.log(apiprices);
-        // var i;
-        // for (i=0; i<apiprices.length; i++) {
-        //     if (apiprices[i].coin === this.state.coin) {
-        //         console.log("trying hard");
-        //         console.log(apiprices[i].coin);
-        //         console.log(apiprices[i].price);
-        //         console.log(this.state.price);
-        //         console.log(this.state.coin);
-        //         this.setState({ price: apiprices[i].price});
-        //         console.log(this.state.price);
-        //         this.setState({ percent_change_24: apiprices[i].percent_change_24});
-        //         i=apiprices.length;
-        //     }
-        // };
+        };
         Coins.saveCoin({
             username: this.state.username,
             coin: this.state.coin,
@@ -211,7 +212,7 @@ class Portfolio extends Component {
             purchaseprice: this.state.purchaseprice,
             purchasedate: this.state.purchasedate,
             notes: this.state.notes,
-            price: this.state.price, 
+            price: this.state.price,
             percent_change_24: this.state.percent_change_24,
             port_value: this.state.port_value,
             gain_loss: this.state.gain_loss
@@ -235,6 +236,7 @@ class Portfolio extends Component {
             .then(res => {
                 this.setState({ stateicons: res.data })
                 console.log(this.state.stateicons);
+                console.log("res of geticons" + res.data);
             }
             ).catch(err => console.log(err));
     };
@@ -340,6 +342,16 @@ class Portfolio extends Component {
         }
     };
 
+    calcTotal({ price, quantity }) {
+        const one = price.slice(1).replace(/,/g,'')
+        console.log("Price", one)
+        console.log("Quantitiy", quantity)
+        const oneParsed = parseFloat(one)
+        const twoParsed = parseInt(quantity)
+        console.log(oneParsed, twoParsed)
+        return twoParsed * oneParsed
+    }
+
     render() {
         return (
             <div>
@@ -426,7 +438,7 @@ class Portfolio extends Component {
                                         placeholder="notes" /*{datenow}*/
                                     />
                                     <FormBtn
-                                        onClick={this.preaddCoinSubmit}
+                                        onClick={this.addCoinSubmit}
                                     >
                                         Add Coin
     </FormBtn>
@@ -454,40 +466,43 @@ class Portfolio extends Component {
                             <h3>No Results to Display. Add Coins. </h3>
                         )} */}
 
-                   
 
- {this.state.portfolio.length ? (
-     <Table>
-          {this.state.portfolio.map(portfolio => {
 
-// const numberWithCommas = (x) => {
-//     var parts = x.toString().split(".");
-//     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-//     return parts.join(".");
-//   }
-  
-return (
-    <tr>
-    <th scope="row"> <DeleteBtn onClick={() => this.deleteCoin(portfolio._id)} /></th>
-    <td> <a id="coinAtag" href={"/coins/" + portfolio.coin}> {portfolio.coin}  </a> <span class="badge badge-dark badge-pill">{portfolio.coin}</span> </td>
-    {portfolio.quantity >0 ? (
-            <td> {portfolio.quantity.toLocaleString()}</td> ) :(
-            <td>Watching</td> )
-} 
-    {portfolio.purchaseprice == null ? (
-        <td>N/A</td> ) :(
-    <td> {portfolio.purchaseprice.toLocaleString({ style: 'currency', currency: 'EUR' })}</td> )} 
-<td> {portfolio.price}</td>
-<td> {portfolio.percent_change_24}%</td>
-{/* <td> {portfolio.total_value}</td>
-<td> {portfolio.gain_loss}</td> */}
-    </tr>
-);
-})}
-</Table>
-) : (
-    <h3>No Results to Display. Add Coins. </h3>
-)}
+                    {this.state.portfolio.length ? (
+                        <Table>
+                            {this.state.portfolio.map(portfolio => {
+
+                                // const numberWithCommas = (x) => {
+                                //     var parts = x.toString().split(".");
+                                //     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                //     return parts.join(".");
+                                //   }
+
+                                return (
+                                    <tr>
+                                        <th scope="row"> <DeleteBtn onClick={() => this.deleteCoin(portfolio._id)} /></th>
+                                        <td> <a id="coinAtag" href={"/coins/" + portfolio.coin}> {portfolio.coin}  </a> <span class="badge badge-dark badge-pill">{portfolio.coin}</span> </td>
+                                        {portfolio.quantity > 0 ? (
+                                            <td> {portfolio.quantity.toLocaleString()}</td>) : (
+                                                <td>Watching</td>)
+                                        }
+                                        {portfolio.purchaseprice == null ? (
+                                            <td>N/A</td>) : (
+                                                <td> {portfolio.purchaseprice.toLocaleString({ style: 'currency', currency: 'USD' })}</td>)}
+                                        <td> {portfolio.price}</td>
+                                        <td> {portfolio.percent_change_24}%</td>
+                                        {portfolio.quantity > 0 ? (
+                                            <td> {this.calcTotal(portfolio).toLocaleString({ style: 'decimal' })}</td>) : (
+                                                <td>Not a HODLER</td>
+                                            )}
+                                        <td> {portfolio.gain_loss}</td>
+                                    </tr>
+                                );
+                            })}
+                        </Table>
+                    ) : (
+                            <h3>No Results to Display. Add Coins. </h3>
+                        )}
                 </div>
             </div>
         );

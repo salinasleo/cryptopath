@@ -53,7 +53,7 @@ window.setTimeout(updatePricesfromAPI, 2000);
 function updatePricesfromAPI(apiprices) {
   console.log("updating prices after 2000 ms");
   console.log(apiprices);
-  console.log("process.env.REACT_APP_SECRET_CODE is " + process.env.REACT_APP_SECRET_CODE);
+  // console.log("process.env.REACT_APP_SECRET_CODE is " + process.env.REACT_APP_SECRET_CODE);
   
   /*
   Coins.updatePrices(apiprices)
