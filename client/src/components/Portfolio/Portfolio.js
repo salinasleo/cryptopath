@@ -3,7 +3,7 @@ import "./Portfolio.css";
 import { Col, Row, Container } from "../../components/Grid";
 import { Table, Tablerow } from "../../components/Table";
 import AddCoin from "../../components/AddCoin";
-import $ from 'jquery';
+import $ from "jquery";
 import { Input, TextArea, FormBtn, FormBtn2 } from "../../components/Form";
 import Coins from "../../utils/Coins";
 import Iconsutil from "../../utils/Iconsutil";
@@ -11,7 +11,15 @@ import DeleteBtn from "../../components/DeleteBtn";
 import { List, ListItem } from "../../components/List";
 import Icons from "../../components/IconsPriced";
 
+
+// $(document).ready(function () {
+//     $('#sortedtable').DataTable();
+//     $('.dataTables_length').addClass('bs-select');
+//     });
+
+
 var request = require("request");
+
 var usethisport;
 var apiprices = [];
 var pricepair = {};

@@ -5,11 +5,13 @@ import Dashboard from "./pages/Dashboard";
 import Footer from "./components/Footer";
 import './App.css';
 import Coins from "./utils/Coins";
+// import $ from 'jquery';
 
 
 var request = require("request");
 var apiprices = [];
 var pricepair = {};
+
 
 
 function getPrices() {
