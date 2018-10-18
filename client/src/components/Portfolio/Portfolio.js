@@ -33,7 +33,6 @@ function addcoinReveal() {
 
 $(document).on("click", '#noaddcoin', noaddcoinReveal);
 
-
 function noaddcoinReveal() {
     document.getElementById("hidden_elements").style.display = "none";
 };
@@ -45,6 +44,7 @@ const datenow = Date.now();
 
 class Portfolio extends Component {
     state = {
+        counter: 0,
         username: localStorage.authentificateduser,
         addcoins: true,
         coin: "BTC",
@@ -62,13 +62,28 @@ class Portfolio extends Component {
 
     componentDidMount() {
         document.getElementById("hidden_elements").style.display = "none";
-        this.geticons();
         this.getPrices();
         this.getportfolio();
+        this.geticons();
+        
+        // this.portfoliorender();
+        // // setInterval(this.forceUpdate(), 1000);
+        // this.forceUpdate();
         // this.coinadded();
+        this.timerID = setInterval(
+            () => this.updatePostAPI(),
+            3000
+          );
+        }
 
-    }
-
+        updatePostAPI() {
+            // this.getportfolio();
+            // this.geticons();
+            // this.portfoliorender();
+            console.log("after seconds: " + this.timerID);
+            console.log(this.state.stateicons);
+            this.forceUpdate();
+          }
 
     getPrices() {
         console.log("Getting prices from API...");
@@ -117,6 +132,8 @@ class Portfolio extends Component {
         return showthese.map((icon, index) => (
             <Icons {...icon} alt={icon.name} handleClick={this.handleClick} />
         ));
+        this.setState({counter: 1});
+        console.log("rendering just icons i have");
     }
 
 
@@ -155,11 +172,25 @@ class Portfolio extends Component {
             );
     };
 
+    initialize = event => {
+        // Preventing the default behavior of the form submit (which is to refresh the page)
+        console.log("initializing");
+        Coins.getportfolio(this.state.username)
+        .then(res => {
+                // this.coinadded();
+                this.getportfolio();
+            })
+            .catch(err => {
+                console.log(err);
+                alert("Oops, something went wrong. " + err);
+            }
+            );
+    };
 
 
     getportfolio = id => {
         // Preventing the default behavior of the form submit (which is to refresh the page)
-        console.log("getting portfolio");
+        console.log("getting portfolio right here right now");
         Coins.getportfolio(this.state.username)
             .then(res => {
                 this.setState({ portfolio: res.data })
@@ -244,6 +275,7 @@ class Portfolio extends Component {
     //     this.getportfolio();
     // };
 
+
     // Handles updating component state when the user types into the input field
     handleInputChange = event => {
         const { name, value } = event.target;
@@ -282,6 +314,7 @@ class Portfolio extends Component {
     renderPage = () => {
         if (this.state.addcoins) {
             return <AddCoin />;
+  
         }
     };
 
