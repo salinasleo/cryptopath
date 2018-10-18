@@ -18,7 +18,7 @@ class Registration extends Component {
   state = {
     username: "",
     password: "",
-    authenticated: false, 
+    authenticated: false,
     alertmsg: ""
   };
 
@@ -41,11 +41,15 @@ class Registration extends Component {
             window.location.reload();
           }
           else {
-            alert("wrong passord");
+            // alert("wrong passord");
+            this.setState({alertmsg: "Incorrect Password"});
+            this.timerID = setTimeout(
+              () => this.clearalert(),
+              1500);
           };
         })
         .catch(err => {
-          alert("User does not exist. " + err);
+          // alert("User does not exist. " + err);
 
           console.log(err);
         })
@@ -56,7 +60,11 @@ class Registration extends Component {
   register = event => {
     event.preventDefault();
     if (this.state.password.length < 6) {
-      alert(`Choose a more secure (longer) password`);
+      // alert(`Choose a more secure (longer) password`);
+      this.setState({alertmsg: "Choose a Longer Password"});
+      this.timerID = setTimeout(
+        () => this.clearalert(),
+        1500);
       return;
     } if (this.state.username && this.state.password) {
       console.log("you clicked button");
@@ -69,7 +77,12 @@ class Registration extends Component {
         .then(res => this.newuser())
         .catch(err => {
           console.log(err);
-          alert("Oops, username already exists. " + err);
+          // alert("Oops, username already exists. " + err);
+          this.setState({alertmsg: "Username Already Exists"});
+          this.timerID = setTimeout(
+            () => this.clearalert(),
+            1500);         
+
         }
         );
     }
@@ -78,6 +91,11 @@ class Registration extends Component {
   logout = event => {
     localStorage.clear();
   };
+
+
+    clearalert() {
+     this.setState({alertmsg: ""})
+      };
 
 
   newuser = () => {
@@ -140,10 +158,18 @@ class Registration extends Component {
             </form>
           </Col>
         </Row>
+  <br></br>
 
-        {/* <div class="alert alert-danger" role="alert">
-  A simple danger alert—check it out!
-</div> */}
+ {this.state.alertmsg ? (
+        <Row>
+          <Col size="md-5"></Col>
+          <Col size="md-2">
+            <div id="alertmsg" class="alert alert-danger" role="alert">{this.state.alertmsg}</div>
+          </Col>
+        </Row>) 
+      : (
+        <h6></h6>
+    )}
 
       </div>
     );

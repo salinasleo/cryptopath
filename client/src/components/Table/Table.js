@@ -25,7 +25,6 @@ export const Table = ({ children }) => {
     <thead>
       <tr>
         <th class="th-sm">
-        <i class="fa fa-sort float-right" aria-hidden="true"></i>
         </th>
         <th class="th-sm">Coin
         <i class="fa fa-sort float-right" aria-hidden="true"></i>
@@ -52,7 +51,7 @@ export const Table = ({ children }) => {
     </thead>
     <tbody>
         {children}
-        
+
     </tbody>
     </table>
   );
