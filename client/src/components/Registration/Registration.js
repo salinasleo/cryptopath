@@ -18,7 +18,8 @@ class Registration extends Component {
   state = {
     username: "",
     password: "",
-    authenticated: false
+    authenticated: false, 
+    alertmsg: ""
   };
 
 
@@ -139,6 +140,11 @@ class Registration extends Component {
             </form>
           </Col>
         </Row>
+
+        {/* <div class="alert alert-danger" role="alert">
+  A simple danger alert—check it out!
+</div> */}
+
       </div>
     );
   }

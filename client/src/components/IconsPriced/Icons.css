@@ -12,15 +12,25 @@
     height: 80px;
   }
 
+  #App-logo-counter{
+    color:red;
+  }
+
   .App-logo-fast {
     animation: App-logo-spin infinite 10s linear;
     height: 80px;
   }
+
   
   .App-logo-counter-fast {
     animation: App-logo-spin-counter infinite 10s linear;
     height: 80px;
   }
+
+  #App-logo-counter-fast{
+    color:red;
+  }
+
 
   .App-logo-veryfast {
     animation: App-logo-spin infinite 3s linear;
@@ -31,6 +41,11 @@
     animation: App-logo-spin-counter infinite 3s linear;
     height: 80px;
   }
+
+  #App-logo-counter-veryfast{
+    color:red;
+  }
+
 
   .App-logo-static{
     height: 80px;
