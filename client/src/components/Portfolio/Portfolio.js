@@ -41,46 +41,6 @@ function noaddcoinReveal() {
 const datenow = Date.now();
 
 
-function getPrices() {
-    console.log("Getting prices from API...");
-    var omdb = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=?fsym=USDT,BTC,ETH,XRP,BCH,EOS,XLM,LTC,ADA,XMR,TRX,IOTA,DASH,BNB,NEO,ETC,XEM,XTZ,VET,DOGE,ZEC,MKR,BTG,OMG,ZRX,ONT,DCR,QTUM,LSK,KIN'&tsyms=USD&extraParams=cryptopath";
-
-    request(omdb, function (error, response, body) {
-        if (!error && response.statusCode === 200) {
-            var Prices = JSON.parse(body);
-            console.log(Prices);
-            console.log("Prices length is " + Object.keys(Prices.DISPLAY).length);
-            var i;
-            var coins = Object.keys(Prices.DISPLAY);
-            console.log(coins);
-            console.log("length is " + coins.length);
-
-            for (i = 0; i < coins.length; i++) {
-                var path = "Prices.DISPLAY." + coins[i];
-                console.log(path);
-                // console.log("Price: " + Prices.DISPLAY.BTC.USD.PRICE + '\n' +
-                //           "Last Updated: " + Prices.DISPLAY.BTC.USD.LASTUPDATE + '\n'     ) ;
-                console.log("Price: " + eval(path + ".USD.PRICE") + '\n' +
-                    "Last Updated: " + eval(path + ".USD.LASTUPDATE") + '\n' +
-                    "Percent Change 24hrs: " + eval(path + ".USD.CHANGEPCT24HOUR") + "%" + '\n');
-                pricepair = {
-                    coin: coins[i], price: eval(path + ".USD.PRICE"), percent_change_24: eval(path + ".USD.CHANGEPCT24HOUR")
-                };
-                apiprices.push(pricepair);
-            }
-            console.log(apiprices);
-        }
-
-    });
-};
-
-getPrices();
-
-
-
-
-//   console.log("this is port global" + usethisport);
-
 
 
 class Portfolio extends Component {
@@ -105,14 +65,14 @@ class Portfolio extends Component {
         this.geticons();
         this.getPrices();
         this.getportfolio();
-        this.coinadded();
+        // this.coinadded();
 
     }
 
 
     getPrices() {
         console.log("Getting prices from API...");
-        var omdb = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=?fsym=USDT,BTC,ETH,XRP,BCH,EOS,XLM,LTC,ADA,XMR,TRX,IOTA,DASH,BNB,NEO,ETC,XEM,XTZ,VET,DOGE,ZEC,MKR,BTG,OMG,ZRX,ONT,DCR,QTUM,LSK,KIN'&tsyms=USD&extraParams=cryptopath";
+        var omdb = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=?fsym=USDT,USDT,BTC,ETH,XRP,BCH,EOS,XLM,LTC,ADA,XMR,TRX,IOTA,DASH,BNB,NEO,ETC,XEM,XTZ,VET,DOGE,ZEC,MKR,BTG,OMG,ZRX,ONT,DCR,QTUM,LSK,KIN,USDT'&tsyms=USD&extraParams=cryptopath";
 
         request(omdb, function (error, response, body) {
             if (!error && response.statusCode === 200) {
@@ -159,76 +119,6 @@ class Portfolio extends Component {
         ));
     }
 
-    // preaddCoinSubmit = event => {
-    //     // Preventing the default behavior of the form submit (which is to refresh the page)
-    //     event.preventDefault();
-    //     console.log("prescrub to add a coin");
-    //     console.log(apiprices);
-    //     var i;
-    //     for (i=0; i<apiprices.length; i++) {
-    //         if (apiprices[i].coin === this.state.coin) {
-    //             console.log("trying hard");
-    //             console.log(apiprices[i].coin);
-    //             console.log(apiprices[i].price);
-    //             console.log(this.state.price);
-    //             console.log(this.state.coin);
-    //             this.setState({ price: apiprices[i].price});
-    //             console.log(this.state.price);
-    //             this.setState({ percent_change_24: apiprices[i].percent_change_24});
-    //             this.setState({ port_value: apiprices[i].price*this.state.quantity});
-    //             this.setState({ gain_loss: (apiprices[i].price - this.state.purchaseprice)*this.state.quantity});
-    //         }
-    //     }
-    //     if (i = apiprices.length) {
-    //         console.log("latest state pre add is " +  this.state.price);
-    //     this.addCoinSubmit();
-    //     }
-    // };
-
-
-    addCoinSubmit = event => {
-        // Preventing the default behavior of the form submit (which is to refresh the page)
-        event.preventDefault();
-        console.log("now add a coin");
-        console.log(apiprices);
-        var i;
-        for (i = 0; i < apiprices.length; i++) {
-            if (apiprices[i].coin === this.state.coin) {
-                console.log("trying hard");
-                console.log(apiprices[i].coin);
-                console.log(apiprices[i].price);
-                console.log(this.state.price);
-                console.log(this.state.coin);
-                this.setState({ price: apiprices[i].price });
-                console.log(this.state.price);
-                this.setState({ percent_change_24: apiprices[i].percent_change_24 });
-                i = apiprices.length;
-            }
-        };
-        Coins.saveCoin({
-            username: this.state.username,
-            coin: this.state.coin,
-            quantity: this.state.quantity,
-            purchaseprice: this.state.purchaseprice,
-            purchasedate: this.state.purchasedate,
-            notes: this.state.notes,
-            price: this.state.price,
-            percent_change_24: this.state.percent_change_24,
-            port_value: this.state.port_value,
-            gain_loss: this.state.gain_loss
-        })
-            .then(res => {
-                this.coinadded();
-                this.getportfolio();
-                console.log(this.state.price);
-            })
-            .catch(err => {
-                console.log(err);
-                alert("Oops, something went wrong. " + err);
-            }
-            );
-    };
-
 
     geticons = id => {
         console.log("getting icons");
@@ -240,6 +130,32 @@ class Portfolio extends Component {
             }
             ).catch(err => console.log(err));
     };
+
+
+    addCoinSubmit = event => {
+        // Preventing the default behavior of the form submit (which is to refresh the page)
+        event.preventDefault();
+        console.log("you tried to add a coin");
+        Coins.saveCoin({
+            username: this.state.username,
+            coin: this.state.coin,
+            quantity: this.state.quantity,
+            purchaseprice: this.state.purchaseprice,
+            purchasedate: this.state.purchasedate,
+            notes: this.state.notes
+        })
+            .then(res => {
+                // this.coinadded();
+                this.getportfolio();
+            })
+            .catch(err => {
+                console.log(err);
+                alert("Oops, something went wrong. " + err);
+            }
+            );
+    };
+
+
 
     getportfolio = id => {
         // Preventing the default behavior of the form submit (which is to refresh the page)
@@ -266,16 +182,41 @@ class Portfolio extends Component {
                     }
                 }
                 // ghetto brute force way of adding api prices to icons
-                for (k = 0; k < this.state.stateicons.length; k++) {
+                let appendedIcons = this.state.stateicons;
+                for (k = 0; k < appendedIcons.length; k++) {
                     for (j = 0; j < apiprices.length; j++) {
                         // console.log("icons array " + k + " " + this.state.stateicons[k].ticker);
                         // console.log("api prices array " + j + " " + apiprices[j].coin);
-                        if (apiprices[j].coin === this.state.stateicons[k].ticker) {
+                        if (apiprices[j].coin === appendedIcons[k].ticker) {
                             // console.log("matched");
-                            this.state.stateicons[k].price = apiprices[j].price;
-                            this.state.stateicons[k].percent_change_24 = apiprices[j].percent_change_24;
+                            appendedIcons[k].price = apiprices[j].price;
+                            appendedIcons[k].percent_change_24 = apiprices[j].percent_change_24;
                             j = apiprices.length;
                         }
+                    }
+                    if (k===appendedIcons.length) {
+                        this.setState({stateicons: appendedIcons});
+                        console.log("appended icons are " + this.state.stateicons);
+                    }
+                }
+
+                let appendedPortfolio = this.state.portfolio;
+                console.log("pre appended porfolio is " + appendedPortfolio);
+                                // do the same but to portfolio
+                for (k = 0; k < appendedPortfolio.length; k++) {
+                    for (j = 0; j < apiprices.length; j++) {
+                        // console.log("icons array " + k + " " + this.state.stateicons[k].ticker);
+                        // console.log("api prices array " + j + " " + apiprices[j].coin);
+                        if (apiprices[j].coin === appendedPortfolio[k].coin) {
+                            // console.log("matched");
+                            appendedPortfolio[k].price = apiprices[j].price;
+                            appendedPortfolio[k].percent_change_24 = apiprices[j].percent_change_24;
+                            j = apiprices.length;
+                        }
+                    }
+                    if (k===appendedPortfolio.length) {
+                        this.setState({porfolio: appendedPortfolio});
+                        console.log("appended porfolio is " + this.state.portfolio);
                     }
                 }
 
@@ -294,12 +235,14 @@ class Portfolio extends Component {
 
     portfoliorender = () => {
         console.log("render portfolio");
+        this.forceUpdate();
+        /*the prices are now being show otherwise*/
     };
 
-    coinadded = () => {
-        console.log("Thank you for adding new coin");
-        this.getportfolio();
-    };
+    // coinadded = () => {
+    //     console.log("Thank you for adding new coin");
+    //     this.getportfolio();
+    // };
 
     // Handles updating component state when the user types into the input field
     handleInputChange = event => {
@@ -320,7 +263,7 @@ class Portfolio extends Component {
         Coins.deleteCoin(id)
             .then(res => {
                 this.getportfolio();
-                this.coinadded();
+                // this.forceUpdate();
             })
             .catch(err => console.log(err));
     };
@@ -343,12 +286,13 @@ class Portfolio extends Component {
     };
 
     calcTotal({ price, quantity }) {
-        const one = price.slice(1).replace(/,/g,'')
-        console.log("Price", one)
-        console.log("Quantitiy", quantity)
+        // const one = price.slice(1).replace(/,/g,'')
+       const one = price.slice(1).replace(/,/g,'')
+        // console.log("Price", one)
+        // console.log("Quantitiy", quantity)
         const oneParsed = parseFloat(one)
         const twoParsed = parseInt(quantity)
-        console.log(oneParsed, twoParsed)
+        // console.log(oneParsed, twoParsed)
         return twoParsed * oneParsed
     }
 
@@ -491,10 +435,10 @@ class Portfolio extends Component {
                                                 <td> {portfolio.purchaseprice.toLocaleString({ style: 'currency', currency: 'USD' })}</td>)}
                                         <td> {portfolio.price}</td>
                                         <td> {portfolio.percent_change_24}%</td>
-                                        {portfolio.quantity > 0 ? (
+                                        {/* {portfolio.quantity > 0 ? (
                                             <td> {this.calcTotal(portfolio).toLocaleString({ style: 'decimal' })}</td>) : (
                                                 <td>Not a HODLER</td>
-                                            )}
+                                            )} */}
                                         <td> {portfolio.gain_loss}</td>
                                     </tr>
                                 );
