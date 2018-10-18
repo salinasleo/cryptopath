@@ -64,7 +64,11 @@ class Portfolio extends Component {
         price: "",
         percent_change_24: "",
         port_value: "",
-        gain_loss: ""
+        gain_loss: "",
+        total_port_value: "",
+        total_gain_loss: "",
+        total_investment: "",
+        increase_decrease:""
     };
 
     componentDidMount() {
@@ -72,7 +76,7 @@ class Portfolio extends Component {
         this.getPrices();
         this.getportfolio();
         this.geticons();
-        
+
         // this.portfoliorender();
         // // setInterval(this.forceUpdate(), 1000);
         // this.forceUpdate();
@@ -80,23 +84,22 @@ class Portfolio extends Component {
         this.timerID = setInterval(
             () => this.updatePostAPI(),
             2200
-          );
-        }
-       
-        updatePostAPI() {
-            // this.getportfolio();
-            // this.geticons();
-            // this.portfoliorender();
-            console.log("after seconds: " + this.timerID);
-            console.log(this.state.stateicons);
+        );
+    }
+
+    updatePostAPI() {
+        // this.getportfolio();
+        // this.geticons();
+        // this.portfoliorender();
+        console.log("after seconds: " + this.timerID);
+        console.log(this.state.stateicons);
+        this.forceUpdate();
+        this.getportfolio();
+        if (this.state.stateicons["0"].price !== "$ 6,650") /*this is hardcoded price before appending prices*/ {
             this.forceUpdate();
-            this.getportfolio();
-            if (this.state.stateicons["0"].price !== "$ 6,650") /*this is hardcoded price before appending prices*/
-            {
-                this.forceUpdate();
-                clearInterval(this.timerID);
-            };
-          }
+            clearInterval(this.timerID);
+        };
+    }
 
 
     getPrices() {
@@ -128,7 +131,7 @@ class Portfolio extends Component {
                     if (i === coins.length - 1) {
                         console.log(apiprices);
                         console.log("done getting prices")
-                        
+
                     };
                 }
 
@@ -222,18 +225,39 @@ class Portfolio extends Component {
                             // console.log("matched");
                             appendedIcons[k].price = apiprices[j].price;
                             appendedIcons[k].percent_change_24 = apiprices[j].percent_change_24;
+                            if (parseFloat(apiprices[j].percent_change_24.replace(/,/g, '')) < -4) {
+                                appendedIcons[k].styling = "App-logo-counter-veryfast"
+                            }
+                            else if (parseFloat(apiprices[j].percent_change_24.replace(/,/g, '')) < -2) {
+                                appendedIcons[k].styling = "App-logo-counter-fast"
+                            }
+                            else if (parseFloat(apiprices[j].percent_change_24.replace(/,/g, '')) < 0) {
+                                appendedIcons[k].styling = "App-logo-counter"
+                            }
+                            else if (parseFloat(apiprices[j].percent_change_24.replace(/,/g, '')) < 2) {
+                                appendedIcons[k].styling = "App-logo"
+                            }
+                            else if (parseFloat(apiprices[j].percent_change_24.replace(/,/g, '')) < 4) {
+                                appendedIcons[k].styling = "App-logo-fast"
+                            }
+                            else appendedIcons[k].styling = "App-logo-veryfast";
+                            console.log("percent change number is " + parseFloat(apiprices[j].percent_change_24.replace(/,/g, '')));
+                            console.log("styling given is " + appendedIcons[k].styling);
+
                             j = apiprices.length;
                         }
                     }
-                    if (k===appendedIcons.length) {
-                        this.setState({stateicons: appendedIcons});
+                    if (k === appendedIcons.length) {
+                        this.setState({ stateicons: appendedIcons });
                         console.log("appended icons are " + this.state.stateicons);
                     }
                 }
 
                 let appendedPortfolio = this.state.portfolio;
                 console.log("pre appended porfolio is " + appendedPortfolio);
-                                // do the same but to portfolio
+                // do the same but to portfolio
+                var total_port_value = 0;
+                var total_gain_loss=0;
                 for (k = 0; k < appendedPortfolio.length; k++) {
                     for (j = 0; j < apiprices.length; j++) {
                         // console.log("icons array " + k + " " + this.state.stateicons[k].ticker);
@@ -242,16 +266,32 @@ class Portfolio extends Component {
                             // console.log("matched");
                             appendedPortfolio[k].price = apiprices[j].price;
                             appendedPortfolio[k].percent_change_24 = apiprices[j].percent_change_24;
-                            appendedPortfolio[k].value = parseFloat(apiprices[j].price.slice(1).replace(/,/g,''))*parseFloat(appendedPortfolio[k].quantity) ;
-                            if  (isNaN(appendedPortfolio[k].value)) { appendedPortfolio[k].value = "Not a HODLER"};
-                            appendedPortfolio[k].gain_loss = appendedPortfolio[k].value - (parseFloat(appendedPortfolio[k].quantity)*parseFloat(appendedPortfolio[k].purchaseprice));
-                            if  (isNaN(appendedPortfolio[k].gain_loss)) { appendedPortfolio[k].gain_loss = "Not a HODLER"};
-                            j = apiprices.length;
+                            appendedPortfolio[k].value = parseFloat(apiprices[j].price.slice(1).replace(/,/g, '')) * parseFloat(appendedPortfolio[k].quantity);
+                            if (isNaN(appendedPortfolio[k].value)) { appendedPortfolio[k].value = "Not a HODLER" }
+                            else {
+                                total_port_value = total_port_value + appendedPortfolio[k].value;
+                                console.log(total_port_value);
+                                this.setState({ total_port_value: total_port_value });
+                            }
+                            appendedPortfolio[k].gain_loss = appendedPortfolio[k].value - (parseFloat(appendedPortfolio[k].quantity) * parseFloat(appendedPortfolio[k].purchaseprice));
+                            if (isNaN(appendedPortfolio[k].gain_loss)) { appendedPortfolio[k].gain_loss = "Not a HODLER" }
+                            else {
+                                total_gain_loss = total_gain_loss + appendedPortfolio[k].gain_loss;
+                                console.log(total_gain_loss);
+                                this.setState({ total_gain_loss: total_gain_loss });
+                            }
+                            // j = apiprices.length;
                         }
                     }
                     console.log("length is " + appendedPortfolio.length + "and iteration is " + k)
-                    if (k===appendedPortfolio.length-1) {
-                        this.setState({porfolio: appendedPortfolio});
+                    if (k === appendedPortfolio.length - 1) {
+                        this.setState({ porfolio: appendedPortfolio });
+                        this.setState({ total_port_value: total_port_value });
+                        this.setState({ total_gain_loss: total_gain_loss});
+                        if (total_port_value>total_gain_loss) {
+                            this.setState({increase_decrease: "increase"})
+                        }
+                            else {this.setState({increase_decrease: "decrease"})};
                         console.log("appended porfolio is " + this.state.portfolio.JSON);
                         console.log("appended porfolio is " + appendedPortfolio.JSON.stringify);
                     }
@@ -273,7 +313,7 @@ class Portfolio extends Component {
     portfoliorender = () => {
         console.log("render portfolio");
         this.forceUpdate();
-        this.setState ({counter:1});
+        this.setState({ counter: 1 });
         /*the prices are now being show otherwise*/
     };
 
@@ -321,17 +361,17 @@ class Portfolio extends Component {
     renderPage = () => {
         if (this.state.addcoins) {
             return <AddCoin />;
-  
+
         }
     };
 
     calcTotal({ price, quantity }) {
         var one
         if (this.state.stateicons["0"].price !== "$ 6,650") {
-            one = price.slice(1).replace(/,/g,'')
+            one = price.slice(1).replace(/,/g, '')
         }
         else {
-            one=price;
+            one = price;
         }
         console.log("Price", one)
         console.log("Quantitiy", quantity)
@@ -340,6 +380,8 @@ class Portfolio extends Component {
         console.log(oneParsed, twoParsed)
         return twoParsed * oneParsed
     }
+
+
 
 
     render() {
@@ -459,52 +501,56 @@ class Portfolio extends Component {
 
 
                     {this.state.portfolio.length ? (
-                        <Table>
-                            {this.state.portfolio.map(portfolio => {
+                        <div>
+                            <h5>Total Portfolio Value is $ {this.state.total_port_value.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}, an {this.state.increase_decrease} of $ {this.state.total_gain_loss.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} </h5>
+    <br></br>
+                            <Table>
+                                {this.state.portfolio.map(portfolio => {
 
-                                // const numberWithCommas = (x) => {
-                                //     var parts = x.toString().split(".");
-                                //     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                //     return parts.join(".");
-                                //   }
+                                    // const numberWithCommas = (x) => {
+                                    //     var parts = x.toString().split(".");
+                                    //     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                    //     return parts.join(".");
+                                    //   }
 
-                                return (
-                                    <tr>
-                                        <th scope="row"> <DeleteBtn onClick={() => this.deleteCoin(portfolio._id)} /></th>
-                                        <td> <a id="coinAtag" href={"/coins/" + portfolio.coin}> {portfolio.coin}  </a> <span class="badge badge-dark badge-pill">{portfolio.coin}</span> </td>
-                                        {portfolio.quantity > 0 ? (
-                                            <td> {portfolio.quantity.toLocaleString()}</td>) : (
-                                                <td>Watching</td>)
-                                        }
-                                        {portfolio.purchaseprice == null ? (
-                                            <td>N/A</td>) : (
-                                                <td> {portfolio.purchaseprice.toLocaleString({ style: 'currency', currency: 'USD' })}</td>)}
-                                        <td> {portfolio.price}</td>
-                                        <td> {portfolio.percent_change_24}%</td>
+                                    return (
+                                        <tr>
+                                            <th scope="row"> <DeleteBtn onClick={() => this.deleteCoin(portfolio._id)} /></th>
+                                            <td> <a id="coinAtag" href={"/coins/" + portfolio.coin}> {portfolio.coin}  </a> <span class="badge badge-dark badge-pill">{portfolio.coin}</span> </td>
+                                            {portfolio.quantity > 0 ? (
+                                                <td> {portfolio.quantity.toLocaleString()}</td>) : (
+                                                    <td>Watching</td>)
+                                            }
+                                            {portfolio.purchaseprice == null ? (
+                                                <td>N/A</td>) : (
+                                                    <td> {portfolio.purchaseprice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>)}
+                                            <td> {portfolio.price}</td>
+                                            <td> {portfolio.percent_change_24}%</td>
 
-                                           {/* <td> $ {portfolio.value.toLocaleString({ style: 'decimal' })}</td>  */}
+                                            {/* <td> $ {portfolio.value.toLocaleString({ style: 'decimal' })}</td>  */}
                                             {/* <td> $ {portfolio.gain_loss.toLocaleString({ style: 'decimal' })}</td>   */}
 
-                                   
 
-                                        {portfolio.value === "Not a HODLER" ? (
-                                            <td> {portfolio.value}</td> ) : 
-                                            portfolio.value == null ? (
-                                             <td>Waiting on Prices</td>
-                                            ) : ( <td> $ {portfolio.value.toLocaleString({ style: 'currency', currency: 'USD'})}</td> )
-                                        }
 
-                                         {portfolio.gain_loss === "Not a HODLER" ? (
-                                            <td> {portfolio.gain_loss}</td> ) : 
-                                            portfolio.gain_loss == null ? (
-                                             <td>Waiting on Prices</td>
-                                            ) : ( <td> $ {portfolio.gain_loss.toLocaleString({ style: 'currency', currency: 'USD' })}</td> )
-                                        }
+                                            {portfolio.value === "Not a HODLER" ? (
+                                                <td> {portfolio.value}</td>) :
+                                                portfolio.value == null ? (
+                                                    <td>Waiting on Prices</td>
+                                                ) : (<td> $ {portfolio.value.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>)
+                                            }
 
-                                    </tr>
-                                );
-                            })}
-                        </Table>
+                                            {portfolio.gain_loss === "Not a HODLER" ? (
+                                                <td> {portfolio.gain_loss}</td>) :
+                                                portfolio.gain_loss == null ? (
+                                                    <td>Waiting on Prices</td>
+                                                ) : (<td> $ {portfolio.gain_loss.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>)
+                                            }
+
+                                        </tr>
+                                    );
+                                })}
+                            </Table>
+                        </div>
                     ) : (
                             <h3>No Results to Display. Add Coins. </h3>
                         )}

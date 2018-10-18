@@ -31,13 +31,13 @@ export const Table = ({ children }) => {
         <i class="fa fa-sort float-right" aria-hidden="true"></i>
         </th>
         <th class="th-sm">Quantity
-        <i class="fa fa-sort float-right" aria-hidden="true"></i>
+        {/* <i class="fa fa-sort float-right" aria-hidden="true"></i> */}
         </th>
         <th class="th-sm">Cost Basis
-        <i class="fa fa-sort float-right" aria-hidden="true"></i>
+        {/* <i class="fa fa-sort float-right" aria-hidden="true"></i> */}
         </th>
         <th class="th-sm">Current Price
-        <i class="fa fa-sort float-right" aria-hidden="true"></i>
+        {/* <i class="fa fa-sort float-right" aria-hidden="true"></i> */}
         </th>
         <th class="th-sm">24hr %Change
         <i class="fa fa-sort float-right" aria-hidden="true"></i>
@@ -52,6 +52,7 @@ export const Table = ({ children }) => {
     </thead>
     <tbody>
         {children}
+        
     </tbody>
     </table>
   );

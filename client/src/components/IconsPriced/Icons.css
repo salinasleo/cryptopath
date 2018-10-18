@@ -22,6 +22,16 @@
     height: 80px;
   }
 
+  .App-logo-veryfast {
+    animation: App-logo-spin infinite 3s linear;
+    height: 80px;
+  }
+  
+  .App-logo-counter-veryfast {
+    animation: App-logo-spin-counter infinite 3s linear;
+    height: 80px;
+  }
+
   .App-logo-static{
     height: 80px;
   }
