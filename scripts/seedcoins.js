@@ -5,13 +5,13 @@ var request = require("request");
 var apiprices = [];
 var pricepair = {};
 
-mongoose.connect(
-  process.env.MONGODB_URI ||
-  "mongodb://localhost/cryptopath"
-);
+// mongoose.connect(
+//   process.env.MONGODB_URI ||
+//   "mongodb://localhost/cryptopath"
+// );
 
 // mongoose.Promise = Promise;
-// mongoose.connect("mongodb://heroku_c5d2bt4t:n1h4fm5u1bi95gjf33uiq0l88o@ds131963.mlab.com:31963/heroku_c5d2bt4t");
+mongoose.connect("mongodb://heroku_c5d2bt4t:n1h4fm5u1bi95gjf33uiq0l88o@ds131963.mlab.com:31963/heroku_c5d2bt4t");
 // this longer one is the good one
 
 
