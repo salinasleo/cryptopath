@@ -41,7 +41,6 @@ const datenow = Date.now();
 
 
 
-
 class Portfolio extends Component {
     state = {
         counter: 0,
@@ -72,10 +71,10 @@ class Portfolio extends Component {
         // this.coinadded();
         this.timerID = setInterval(
             () => this.updatePostAPI(),
-            3000
+            2200
           );
         }
-
+       
         updatePostAPI() {
             // this.getportfolio();
             // this.geticons();
@@ -83,7 +82,14 @@ class Portfolio extends Component {
             console.log("after seconds: " + this.timerID);
             console.log(this.state.stateicons);
             this.forceUpdate();
+            this.getportfolio();
+            if (this.state.stateicons["0"].price !== "$ 6,650") /*this is hardcoded price before appending prices*/
+            {
+                this.forceUpdate();
+                clearInterval(this.timerID);
+            };
           }
+
 
     getPrices() {
         console.log("Getting prices from API...");
@@ -114,6 +120,7 @@ class Portfolio extends Component {
                     if (i === coins.length - 1) {
                         console.log(apiprices);
                         console.log("done getting prices")
+                        
                     };
                 }
 
@@ -132,7 +139,6 @@ class Portfolio extends Component {
         return showthese.map((icon, index) => (
             <Icons {...icon} alt={icon.name} handleClick={this.handleClick} />
         ));
-        this.setState({counter: 1});
         console.log("rendering just icons i have");
     }
 
@@ -172,21 +178,6 @@ class Portfolio extends Component {
             );
     };
 
-    initialize = event => {
-        // Preventing the default behavior of the form submit (which is to refresh the page)
-        console.log("initializing");
-        Coins.getportfolio(this.state.username)
-        .then(res => {
-                // this.coinadded();
-                this.getportfolio();
-            })
-            .catch(err => {
-                console.log(err);
-                alert("Oops, something went wrong. " + err);
-            }
-            );
-    };
-
 
     getportfolio = id => {
         // Preventing the default behavior of the form submit (which is to refresh the page)
@@ -195,6 +186,7 @@ class Portfolio extends Component {
             .then(res => {
                 this.setState({ portfolio: res.data })
                 console.log(this.state.portfolio);
+                console.log("data above came from server");
                 var usethisport = this.state.portfolio;
                 var i;
                 var k;
@@ -242,12 +234,18 @@ class Portfolio extends Component {
                             // console.log("matched");
                             appendedPortfolio[k].price = apiprices[j].price;
                             appendedPortfolio[k].percent_change_24 = apiprices[j].percent_change_24;
+                            appendedPortfolio[k].value = parseFloat(apiprices[j].price.slice(1).replace(/,/g,''))*parseFloat(appendedPortfolio[k].quantity) ;
+                            if  (isNaN(appendedPortfolio[k].value)) { appendedPortfolio[k].value = "Not a HODLER"};
+                            appendedPortfolio[k].gain_loss = appendedPortfolio[k].value - (parseFloat(appendedPortfolio[k].quantity)*parseFloat(appendedPortfolio[k].purchaseprice));
+                            if  (isNaN(appendedPortfolio[k].gain_loss)) { appendedPortfolio[k].gain_loss = "Not a HODLER"};
                             j = apiprices.length;
                         }
                     }
-                    if (k===appendedPortfolio.length) {
+                    console.log("length is " + appendedPortfolio.length + "and iteration is " + k)
+                    if (k===appendedPortfolio.length-1) {
                         this.setState({porfolio: appendedPortfolio});
-                        console.log("appended porfolio is " + this.state.portfolio);
+                        console.log("appended porfolio is " + this.state.portfolio.JSON);
+                        console.log("appended porfolio is " + appendedPortfolio.JSON.stringify);
                     }
                 }
 
@@ -267,6 +265,7 @@ class Portfolio extends Component {
     portfoliorender = () => {
         console.log("render portfolio");
         this.forceUpdate();
+        this.setState ({counter:1});
         /*the prices are now being show otherwise*/
     };
 
@@ -319,15 +318,21 @@ class Portfolio extends Component {
     };
 
     calcTotal({ price, quantity }) {
-        // const one = price.slice(1).replace(/,/g,'')
-       const one = price.slice(1).replace(/,/g,'')
-        // console.log("Price", one)
-        // console.log("Quantitiy", quantity)
+        var one
+        if (this.state.stateicons["0"].price !== "$ 6,650") {
+            one = price.slice(1).replace(/,/g,'')
+        }
+        else {
+            one=price;
+        }
+        console.log("Price", one)
+        console.log("Quantitiy", quantity)
         const oneParsed = parseFloat(one)
-        const twoParsed = parseInt(quantity)
-        // console.log(oneParsed, twoParsed)
+        const twoParsed = parseFloat(quantity)
+        console.log(oneParsed, twoParsed)
         return twoParsed * oneParsed
     }
+
 
     render() {
         return (
@@ -468,11 +473,26 @@ class Portfolio extends Component {
                                                 <td> {portfolio.purchaseprice.toLocaleString({ style: 'currency', currency: 'USD' })}</td>)}
                                         <td> {portfolio.price}</td>
                                         <td> {portfolio.percent_change_24}%</td>
-                                        {/* {portfolio.quantity > 0 ? (
-                                            <td> {this.calcTotal(portfolio).toLocaleString({ style: 'decimal' })}</td>) : (
-                                                <td>Not a HODLER</td>
-                                            )} */}
-                                        <td> {portfolio.gain_loss}</td>
+
+                                           {/* <td> $ {portfolio.value.toLocaleString({ style: 'decimal' })}</td>  */}
+                                            {/* <td> $ {portfolio.gain_loss.toLocaleString({ style: 'decimal' })}</td>   */}
+
+                                   
+
+                                        {portfolio.value === "Not a HODLER" ? (
+                                            <td> {portfolio.value}</td> ) : 
+                                            portfolio.value == null ? (
+                                             <td>Waiting on Prices</td>
+                                            ) : ( <td> $ {portfolio.value.toLocaleString({ style: 'currency', currency: 'USD'})}</td> )
+                                        }
+
+                                         {portfolio.gain_loss === "Not a HODLER" ? (
+                                            <td> {portfolio.gain_loss}</td> ) : 
+                                            portfolio.gain_loss == null ? (
+                                             <td>Waiting on Prices</td>
+                                            ) : ( <td> $ {portfolio.gain_loss.toLocaleString({ style: 'currency', currency: 'USD' })}</td> )
+                                        }
+
                                     </tr>
                                 );
                             })}

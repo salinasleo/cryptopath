@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const coinsSchema = new Schema({
     username: { type: String, required: true },
     coin: { type: String, required: true },
-    quantity: { type: String},
+    quantity: { type: Number},
     purchasedate: { type: Date, default: Date.now },
     purchaseprice: { type: Number },
     favorite: { type: Boolean, default: false },
@@ -19,10 +19,12 @@ const coinsSchema = new Schema({
             "Note should be shorter."
         ]
     },
-    price:  { type: String },
+    price:  { type: Number },
+    value:  { type: Number },
+    gain_loss: { type: Number },
     last_updated_price: { type: Date, default: Date.now }, 
-    percent_change_24: { type: String },
-    volume24:  { type: String }
+    percent_change_24: { type: Number },
+    volume24:  { type: Number }
     // , 
     // total_value:  { type: Number }, 
     // gain_loss:  { type: Number } 
