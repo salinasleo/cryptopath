@@ -420,7 +420,16 @@ class Portfolio extends Component {
                                             <option value="DOGE">DOGE</option>
                                             <option value="XMR">Monero</option>
                                             <option value="XLM">Stellar</option>
+                                            <option value="XRP">Ripple</option>
+                                            <option value="BCH">Bitcoin Cash</option>
+                                            <option value="EOS">EOS</option>
+                                            <option value="ADA">Cardano</option>
+                                            <option value="TRX">TRX</option>
+                                            <option value="NEO">NEO</option>
                                             <option value="DASH">Dash</option>
+                                            <option value="ETC">Ethereum Classic</option>
+                                            <option value="KIN">Kin</option>
+                                            <option value="LSK">Lisk</option>
                                         </select>
                                         <small id="coinselectHelp" class="text">
                                             Required. Other fields optional.

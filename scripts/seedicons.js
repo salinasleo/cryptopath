@@ -123,6 +123,76 @@ const iconsSeed = [
     price: "$0.54",
     speed: "20s",
     styling: "App-logo-counter-fast"
+  },
+  {
+    clicked: false,
+    url: "/xrp",
+    src: "./images/xrp.ico",
+    name: "Ripple",
+    ticker: "XRP",
+    price: "$0.54",
+    speed: "20s",
+    styling: "App-logo-counter-fast"
+  },
+  {
+    clicked: false,
+    url: "/bch",
+    src: "./images/bch.ico",
+    name: "Bitcoin Cash",
+    ticker: "BCH",
+    price: "$0.54",
+    speed: "20s",
+    styling: "App-logo-counter-fast"
+  },
+  {
+    clicked: false,
+    url: "/eos",
+    src: "./images/eos.ico",
+    name: "EOS",
+    ticker: "EOS",
+    price: "$0.54",
+    speed: "20s",
+    styling: "App-logo-counter-fast"
+  },
+  {
+    clicked: false,
+    url: "/ada",
+    src: "./images/ada.ico",
+    name: "ADA",
+    ticker: "ADA",
+    price: "$0.54",
+    speed: "20s",
+    styling: "App-logo-counter-fast"
+  },
+  {
+    clicked: false,
+    url: "/trx",
+    src: "./images/trx.ico",
+    name: "TRX",
+    ticker: "TRX",
+    price: "$0.54",
+    speed: "20s",
+    styling: "App-logo-counter-fast"
+  },
+  {
+    clicked: false,
+    url: "/neo",
+    src: "./images/neo.ico",
+    name: "NEO",
+    ticker: "NEO",
+    price: "$0.54",
+    speed: "20s",
+    styling: "App-logo-counter-fast"
+  },
+  {
+    clicked: false,
+    url: "/etc",
+    src: "./images/etc.ico",
+    name: "Ethereum",
+    ticker: "ETC",
+    price: "$0.54",
+    speed: "20s",
+    styling: "App-logo-counter-fast"
   }
 ];
 
